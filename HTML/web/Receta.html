@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<form action="https://www.w3schools.com/action_page.php" method="post">
+  <fieldset>
+    <legend>Receta</legend>
+    <label for="nombre">Nombre receta:</label>
+        <input name="nombre" id="nombre" type="text"><br>
+    <label for="email">correo del autor: </label>
+        <input id="gmail" name="gmail" type="email"><br>
+        </select><br>
+    <label>Momento para comerlo: </label>
+        <input name="Momento" type="checkbox" value="Desayuno">Desayuno
+        <input name="Momento" type="checkbox" value="Almuerzo"> Almuerzo
+        <input name="Momento" type="checkbox" value="Merienda">Merienda
+        <input name="Momento" type="checkbox" value="Cena"> Cena<br><br>
+         </select><br>
+    <label for="ingredientes">ingredientes de la receta: </label>
+        <select name="ingredientes" id="ingredientes" multiple>
+            <optgroup label="carnes">
+                <option>presa iberica</option>
+                <option>lagartito</option>
+                <option>pollo</option>
+            </optgroup>
+            <optgroup label="pescados">
+                <option>Dorada</option>
+                <option>Acedia</option>
+            <optgroup label="frutas">
+                <option>Melon</option>
+                <option> kiwi</option>
+            <optgroup label="verduras">
+                <option>rabano</option>
+                <option>pimiento</option>
+            </optgroup>
+        </select><br><br>
+    <label>Horas requeridas</label>
+      <input name="horas" type="radio" value="0">0 
+      <input name="horas" type="radio" value="1">1
+      <input name="horas" type="radio" value="2">2
+        </select><br>
+    <label>Minutos requeridos</label>
+      <input name="minutos" type="radio" value="15">15
+      <input name="minutos" type="radio" value="30">30
+      <input name="minutos" type="radio" value="45">45
+      <input name="minutos" type="radio" value="0">0
+  </fieldset>
+    <input type="submit" name="enviar" value="Enviar"></input>
+    </form>
