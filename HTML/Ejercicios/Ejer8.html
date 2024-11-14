@@ -5,30 +5,24 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Ejer. 5</title>
 	<style type="text/css">
-		#0 {
+		#contenedor {
 			display: flex;
-			display: block;
-			border: 3px solid black;
+ 			flex-wrap: wrap;
+  			gap: 1rem;
 		}
-		#1 {
-			display: block;
-			border: 3px solid black;
-		}
-		#2 {
-			display: block;
-			border: 3px solid black;
-		}
-		#3 {
-			display: block;
-			border: 3px solid black;
+		#contenedores {
+			flex: 1 1 30%;
+  			padding: 1rem;
+  			border: 1px solid #ddd;
+  			background-color: #f9f9f9;
 		}
 	</style>
 </head>
 <body>
-	<div id="0">
-		<div id="1">Tarjeta 1</div>
-		<div id="2">Tarjeta 2</div>
-		<div id="3">Tarjeta 3</div>
+	<div id="contenedor">
+		<div id="contenedores">Tarjeta 1</div>
+		<div id="contenedores">Tarjeta 2</div>
+		<div id="contenedores">Tarjeta 3</div>
 	</div>
 </body>
 </html>

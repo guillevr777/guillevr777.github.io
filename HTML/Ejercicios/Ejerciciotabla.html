@@ -5,35 +5,40 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>4.3 tabla</title>
 	<style type="text/css">
-		table {
-			border: 1;
-			width: 50%; 
-			align: center; 
-			cellpadding: 10px;
+		#t1 {
+			margin-left: 25%;
+			border: 1px outset grey;
+			width: 50%;
 		}
 		td {
 			border: 1px inset grey;
 			padding: 10px;
 		}
-		tabla {
+		#fila {
 			margin-left: 25%;
-			border: 1px outset grey;
 			width: 50%;
-		}
-		fila{
 			display: block;
+			border: 1px outset grey;
 		}
-		p1 {
+		#p1 {
 			display: inline-block;
-			padding: 10px;
+			padding: 1px;
 			margin: 2px;
-			border: 1px insert grey;
-			width: 30%;
+			border: 1px inset grey;
+			width: 32%;
 		}
+		#p2 {
+			display: inline-block;
+			padding: 1px;
+			margin: 2px;
+			border: 1px inset grey;
+			width: 32%;
+		}
+
 	</style>
 </head>
 <body>
-	<table>
+<table id="t1">
     <tr>
         <td>Tutoriales En Linea 1</td>
         <td>Tutoriales En Linea 2</td>
@@ -50,11 +55,9 @@
 		<div id ="p1"><p>Tutoriales En Linea 1</p></div>
 		<div id="p1"><p>Tutoriales En Linea 2</p></div>
 		<div id="p1"><p>Tutoriales En Linea 3</p></div>
-	</div>
-	<div id ="fila">
-		<div id="p1"><p>Tutoriales En Linea 4</p></div>
-		<div id="p1"><p>Tutoriales En Linea 5</p></div>
-		<div id="p1"><p>Tutoriales En Linea 6</p></div>
+		<div id="p2"><p>Tutoriales En Linea 4</p></div>
+		<div id="p2"><p>Tutoriales En Linea 5</p></div>
+		<div id="p2"><p>Tutoriales En Linea 6</p></div>
 	</div>
 <div>
 </body>
