@@ -1,0 +1,30 @@
+body {
+    background-color: #B5F4FF;
+    text-align: center;
+}
+#titulo {
+	text-align: center;
+    font-family: sans-serif helvetica;
+}
+header {
+	background-color: #007bff;
+}
+a {
+	text-decoration: none;
+}
+a:hover {
+	color: white;
+}
+nav {
+	color: white;
+}
+#foto {
+	height: 200px;
+	width: 300px;
+}
+#contenido {
+	padding: 3px;
+}
+#descripcion {
+	font-size: 20px;
+}
