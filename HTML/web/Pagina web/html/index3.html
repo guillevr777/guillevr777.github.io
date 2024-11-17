@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../css/style3.css">
+    <title>Página de Contacto</title>
+</head>
+<body>
+    <header>
+        <a href="../CSSnivelbasico.html"><img id="logo" src="../img/cara.jpg"></a>
+        <nav>
+        <a href="index1.html">Inicio</a>
+        <a href="index2.html">Sobre mí</a>
+        <a href="index3.html">Contacto</a>
+        </nav>
+    </header>
+
+    <section id="contenido">
+        <div id="bloque">
+            <h2 id="titulo">Formulario de Contacto</h2>
+            
+            <!-- Formulario de contacto -->
+            <form action="https://www.w3schools.com/action_page.php" method="post">
+                <fieldset>
+                    <legend>Datos de contacto</legend>
+
+                    <label for="nombre">Nombre: </label>
+                    <input name="nombre" id="nombre" type="text" placeholder="Ingresa tu nombre" required><br>
+
+                    <label for="email">Correo electrónico: </label>
+                    <input name="email" id="email" type="email" placeholder="Ingresa tu correo electrónico" required><br>
+
+                    <label for="mensaje">Mensaje: </label>
+                    <textarea name="mensaje" id="mensaje" placeholder="Escribe tu mensaje" rows="6" required></textarea><br>
+
+                    <input type="submit" value="Enviar" id="submit">
+                </fieldset>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p id="derechos">© 2024 Mi Página Web. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html> 

@@ -2,12 +2,6 @@ body {
     background-color: lightskyblue;
     font-family: Arial, sans-serif;
 }
-
-#titulo {
-	font-family: Helvetica, sans-serif;
-    text-align: center;
-    padding-top: 50px;
-}
 header {
 	background-color: dodgerblue;
     padding: 15px;
@@ -15,13 +9,10 @@ header {
     text-align: center;
 }
 a {
-	color: white;
+    color: white;
     text-decoration: none;
     margin: 0 20px;
     font-size: 1.2rem;
-}
-a:hover {
-	color: white;
 }
 #contenido {
 	padding: 20px;
@@ -35,16 +26,23 @@ a:hover {
     margin-top: 20px;
     background-color: white;
 }
-#descripcion {
-	font-size: 2.5em;
-    color: dodgerblue;
+#bloque {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
 }
-#texto {
-	font-size: 1.2em;
-    color: darkgray;
-    margin: 15px 0;
+.bloques {
+    margin-left: 10%;
+    margin-right: 10%;
 }
-#foto {
+#bloqueMediaMark {
+    background-color: red;
+}
+#Mediamark {
+    align-items: center;
+}
+.foto {
 	width: 100%;
     max-width: 300px;
     height: auto;

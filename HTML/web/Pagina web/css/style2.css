@@ -1,0 +1,74 @@
+body {
+    background-color: lightskyblue;
+    font-family: Arial, sans-serif;
+}
+header {
+    background-color: dodgerblue;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+a {
+    color: white;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 1.2rem;
+}
+#contenido {
+    background-color: white;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+#titulo {
+    text-align: center;
+    font-size: 2rem;
+    color: dodgerblue;
+    margin-bottom: 20px;
+}
+.puntos {
+    font-size: 20px;
+    font-weight: bold;
+    color: dodgerblue;
+    margin-top: 20px;
+    text-align: left;
+}
+.parrafada {
+    text-align: justify;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-top: 10px;
+    color: darkgray;
+}
+img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+#divmagen {
+    text-align: center; 
+    margin-bottom: 20px;"
+}
+#cara {
+    border-radius: 50%; 
+    width: 150px; 
+    height: 150px; 
+}
+#logo {
+    float: left;
+    border-radius: 50%; 
+    width: 50px; 
+    height: 50px;
+}
