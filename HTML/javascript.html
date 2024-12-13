@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>a</title>
+</head>
+<body>
+<p> Mira la consola </p>
+<button>Enviar</button>
+<imput></imput>
+<script type="text/javascript">
+	function persona() {
+    let nombre = "Guillermo";
+    let edad = 20;
+    let a = 4;
+    let b = 2;
+    console.log("Mi nombre es " + nombre + " y tengo " + edad + " años.");
+    console.log("2 x 4 = " + 2*4);
+    console.log("2 / 4 = " + 2/4);
+    console.log("2 - 4 = " + 2-4);
+    console.log("2 + 4 = " + 2+4);
+    };
+    function parImpar () {
+    	let numero = 20;
+    	let boolean = "no";
+    	if (20 % 2 == 0) {
+    		let boolean = "";
+    	}
+    	console.log("El numero " + boolean + " es par")
+    	let edad = numero;
+    	if (edad >= 18) {
+    		console.log("Si puede votar")
+    	} else {
+    		console.log("No puede votar por ser menor")
+    	}
+    	for (let i = 1 ; i < 10 ; i++) {
+    		console.log(i);
+    	}
+    	let suma = 0;
+    	for (let i = 1 ; i < 100 ; i++) {
+    		suma += i;
+    	}
+    };
+    	function saludar () {
+    		let nombre = "Guillermo";
+    		console.log("Mi nombre es " + nombre)
+    };
+    	function promedio () {
+    		let numero1 = 5;
+    		let numero2 = 10;
+    		console.log(numero1/numero2 + " es la media.")
+    };
+    	function devolver() {
+    		let numero = 47;
+    		if (numero > 0) {
+    			console.log("Es positivo")
+    		} else if (numero < 0) {
+    			console.log("Es negativo")
+    		} else {
+    			console.log("Es cero")
+    		}
+    };
+    	function bisiesto() {
+    		let año = 2100;
+    		 if ((año % 4 == 0 && año % 100 != 0) || (año % 400 == 0)) {
+            console.log("El año es bisiesto")
+        } else {
+        	console.log("El año no es bisiesto")
+        }
+    };
+    	function array() {
+    		let numeros = [1,2,3,4,5];
+            numeros [0] = 5;
+            numeros [4] = 0;
+            for (let i = 0 ; i < 5 ; i++) {
+                console.log(numeros[i])
+            }
+    	}
+        function mayor() {
+            let numeroMayor = 0;
+            let array = [1,4,3,6,2,7,2,2,10];
+            for (let i = 0 ; i < 9 ; i++) {
+                if (array[i] > numeroMayor) {
+                    numeroMayor = array[i];
+                }
+            }
+            console.log("El mayor numero es " + numeroMayor)
+        }
+        //Llamar funcion objeto (personaNueva.mostrarInfo())
+        let personaNueva = { 
+         nombre: "Juan",
+         edad: 20,
+         ciudad: "Los Angeles",
+         ocupacion: "Albañil",
+         mostrarInfo: function() {
+        console.log("Mi nombre es " + this.nombre + " y tengo " + this.edad + " años. Desde hace un tiempo vivo en " + this.ciudad);
+         },
+        };
+        delete personaNueva.nombre
+        function recibir() {
+            console.log(personaNueva)
+        }
+</script>
+</body>
+</html>
