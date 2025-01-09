@@ -4,10 +4,18 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>a</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
 <p> Mira la consola </p>
+
+<p id = "unaID"> Hola </p>
+<p class = "unaCLASE"> Adios </p>
+<p class = "unaCLASE"> No se </p>
+<h1 id="miElemento">¡Hola, jQuery!</h1>
+
 <button>Enviar</button>
+
 <imput></imput>
 <script type="text/javascript">
 	function persona() {
@@ -101,6 +109,31 @@
         function recibir() {
             console.log(personaNueva)
         }
+
+        let casa = "nervion";
+        let nombreCasa = "Maki";
+        let mensaje = `Hola , vivo en ${casa} y mi casa se llama ${nombreCasa}.`;
+        console.log(mensaje);
+
+        function sumar(a, b) {
+        return a + b;
+        }
+        console.log(sumar(3, 7));
+
+        const materials = ['Hydrogen', 'Helium', 'Lithium', 'Beryllium'];
+        console.log(materials.map((material) => material.length));
+
+        const elemento = document.getElementById("unaID");
+        console.log(elemento);
+        console.log(elemento.textContent);
+
+        const elementos = document.getElementsByClassName("unaCLASE");
+        console.log(elementos[0]);
+        console.log(elementos[1].textContent);
+
+        $(document).ready(function() {
+        $("#miElemento").text("¡jQuery está funcionando!");
+        });
 </script>
 </body>
 </html>

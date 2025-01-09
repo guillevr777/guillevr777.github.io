@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Jquery</title>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+<p id="titulo">Titulo</p>
+<p id = "Nombre">Hola</p>
+<button id="boton">Presióname</button>
+<script>
+
+	//crear
+	const nuevoElemento = document.createElement("p");
+	nuevoElemento.textContent = "Soy un nuevo div sin html";
+	document.body.appendChild(nuevoElemento);
+
+	//le asignamos una etiqueta
+	nuevoElemento.id = "nuevoElemento";
+
+	//Eliminar
+//	const eliminar = document.getElementById("Nombre");
+//	eliminar.remove();
+
+	//modificar
+	const fondo = document.querySelector("#Nombre");
+	fondo.style.backgroundColor = "orange";
+	fondo.style.color = "blue";
+
+	//actualizar contenido
+	const contenedor = document.querySelector("#Nombre");
+	contenedor.innerHTML = "<p>Contenido actualizado</p>";
+
+	//modificar texto dinamico
+	const titulo = document.querySelector("#nuevoElemento");
+	titulo.textContent = "Nuevo texto dinámico";
+
+	//avisa de que precionamos un boton
+	document.querySelector("button").addEventListener("click", function(){
+    alert("¡Botón presionado!");
+	});
+
+	//cambia el contenido al pulsar el boton
+	document.getElementById("boton").addEventListener("click", function(){
+    const contenidoBoton = document.getElementById("boton");
+    boton.textContent = "Presionado";
+	});
+
+	//objeto
+	const persona = {
+    nombre: "Juan",
+    edad: 30,
+    //metodo
+    saludar: function() {
+        return `Hola, me llamo ${this.nombre}`;
+    }
+	};
+	//llamada
+	console.log(persona.saludar());
+
+	//borra la propiedad temporalmente del objeto
+	delete persona.edad
+
+	// Ejercicio 1
+	const nombre = "Guillermo";
+	const edad = 20;
+
+	// Mostrar el mensaje
+	console.log(`Mi nombre es ${nombre} y tengo ${edad} años.`);
+
+	// Declarar dos números
+	const numero1 = 10;
+	const numero2 = 5;
+
+	// Calcular las operaciones
+	const suma = numero1 + numero2;
+	const diferencia = numero1 - numero2;
+	const producto = numero1 * numero2;
+	const cociente = numero1 / numero2;
+
+	// Mostrar los resultados
+	console.log(`La suma de ${numero1} y ${numero2} es: ${suma}`);
+	console.log(`La diferencia entre ${numero1} y ${numero2} es: ${diferencia}`);
+	console.log(`El producto de ${numero1} y ${numero2} es: ${producto}`);
+	console.log(`El cociente de ${numero1} entre ${numero2} es: ${cociente}`);
+
+	//Ejercicio 2
+
+	const parImpar = {
+		numero : 15,
+		calculo: function() {
+			if (this.numero % 2 == 0) {
+				return `${this.numero} es par.`;
+			} else {
+				return `${this.numero} es impar.`;
+			}
+		}
+	};
+	// Llama al método calculo para verificar
+	console.log(parImpar.calculo());
+
+	const humano = {
+		edad : 17,
+		votar: function() {
+			if (this.edad >= 18) {
+				return `con ${this.edad} es posible votar.`;
+			} else {
+				return `con ${this.edad} no es posible votar.`;
+			}
+		}
+	};
+	console.log(humano.votar());
+
+	const bucle = {
+  	numero: 1,
+  	bucles: function() {
+    	for (this.numero; this.numero < 10; this.numero++) {
+      		console.log(this.numero);
+    		}
+  		}
+	};
+	bucle.bucles();
+
+	//suma del 1 al 100
+//	const calculos = {
+//		numero : 1,
+//		suma : 0,
+//		sumar : function() {
+//			for (this.numero ; this.numero < 100 ; this.numero++) {
+//				this.suma += this.numero;
+//				console.log(this.suma);
+//			}
+//		}
+//	};
+//	calculos.sumar();
+//	console.log(calculos.suma);
+
+	
+</script>
+</body>
+</html>
