@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 2: Datos Dinámicos</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplo 2: Datos dinámicos</h1>
+    <form id="formulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos" required>
+
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" name="ciudad" required>
+
+        <label for="ciudad">Edad:</label>
+        <input type="text" id="edad" name="edad" required>
+
+        <button type="button" id="agregar">Añadir</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Ciudad</th>
+                <th>Edad</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-cuerpo">
+        </tbody>
+    </table>
+
+    <script>
+        function serializar(obj) {
+            return JSON.stringify(obj);
+        }
+        function deserializar(objJson) {
+            return JSON.parse(objJson);
+        }
+
+        document.getElementById('agregar').addEventListener('click', function() {
+            let nombre = document.getElementById('nombre').value;
+            let apellidos = document.getElementById('apellidos').value;
+            let ciudad = document.getElementById('ciudad').value;
+            let edad = document.getElementById('edad').value;
+
+            let datos = {
+                nombre: nombre,
+                apellidos: apellidos,
+                ciudad: ciudad,
+                edad: edad
+            };
+
+            let json_serializado = serializar(datos);
+            console.log("JSON Serializado:", json_serializado);
+
+            let obj_recuperado = deserializar(json_serializado);
+            console.log("Objeto Deserializado:", obj_recuperado);
+
+            let nuevaFila = crearFila(obj_recuperado);
+
+            document.getElementById('tabla-cuerpo').insertAdjacentHTML('beforeend', nuevaFila);
+
+            document.getElementById('formulario').reset();
+        });
+
+	        function crearFila(datos) {
+	            return `
+	                <tr>
+	                    <td>${datos.nombre}</td>
+	                    <td>${datos.apellidos}</td>
+	                    <td>${datos.ciudad}</td>
+	                    <td>${datos.edad}</td>
+	                </tr>
+	            `;
+	        }
+	        let calculo = {
+	        	let edades = datos.edad;
+	        	let mayor = datos.edad;
+	        	let menor = datos.edad;
+	        	let suma = datos.edad;
+				let multiplicacion = datos.edad;
+				function (calculo) {
+					
+				}
+	        }
+	        alert("Alerta");
+
+    </script>
+</body>
+</html>
