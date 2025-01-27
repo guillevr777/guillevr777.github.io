@@ -1,0 +1,1 @@
+Que es , como se creo , ejercicio de packet tracert de ipv6 tiene que incluir 2 redes usando ipv6  , presentación , configuración y un kahoot.
