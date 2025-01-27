@@ -702,23 +702,49 @@ CREATE TABLE TRABAJA (
 
 	USE EJEMPLOSRESTRICCIONES
 
-	CREATE TABLE DATOSRESTRICTIVOS (
-		ID SMALLINT NOT NULL CONSTRAINT PK_DATOSRESTRICTIVOS PRIMARY KEY CHECK(ID % 2 != 0),
-		NOMBRE VARCHAR(15) NOT NULL UNIQUE CHECK (LEFT(Nombre, 1) NOT IN ('N', 'X')),
-		NUMPELOS INT CHECK(NUMPELOS BETWEEN 0 AND 150000),
-		TIPOROPA CHAR(9) CHECK(TIPOROPA IN ('C','F','E','P','B','N')),
-		NUMSUERTE TINYINT CHECK(NUMSUERTE BETWEEN 10 AND 40 AND NUMSUERTE % 3 = 0),
-		MINUTOS TINYINT CHECK(MINUTOS BETWEEN 20 AND 85 AND MINUTOS BETWEEN 120 AND 185)
+	CREATE TABLE DatosRestrictivos (
+    ID SMALLINT AUTO_INCREMENT CHECK (ID % 2 = 1),
+    Nombre VARCHAR(15) NOT NULL UNIQUE CHECK (LEFT(Nombre, 1) NOT IN ('N', 'X')),
+    Numpelos INT CHECK (Numpelos BETWEEN 0 AND 150000),
+    TipoRopa CHAR(1) CHECK (TipoRopa IN ('C', 'F', 'E', 'P', 'B', 'N')),
+    NumSuerte TINYINT CHECK (NumSuerte BETWEEN 10 AND 40 AND NumSuerte % 3 = 0),
+    Minutos TINYINT CHECK ((Minutos BETWEEN 20 AND 85) OR (Minutos BETWEEN 120 AND 185)),
+    PRIMARY KEY (ID)
 	)
-	CREATE TABLE DATOSRELACIONADOS (
-    NombreRelacionado VARCHAR(15) NOT NULL,
-    PalabraTabu VARCHAR(20) NOT NULL CHECK (
-        PalabraTabu NOT IN ('MENA', 'Gurtel', 'ERE', 'Procés', 'sobresueldo') 
-        AND RIGHT(PalabraTabu, 2) != 'eo'
-    )
-    NumRarito TINYINT NOT NULL CHECK (
-        NumRarito < 20 AND NumRarito NOT IN (2, 3, 5, 7, 11, 13, 17, 19)
-    )
-    NumMasgrande SMALLINT NOT NULL CONSTRAINT PK_DATOSRELACIONADOS PRIMARY KEY CHECK (NumMasgrande >= NumRarito AND NumMasgrande <= 1000),
-    CONSTRAINT FK_NombreRelacionado FOREIGN KEY (NombreRelacionado) REFERENCES DATOSRESTRICTIVOS(NOMBRE))
+	CREATE TABLE DatosRelacionados (
+    NombreRelacionado VARCHAR(15),
+    PalabraTabu VARCHAR(20) CHECK (PalabraTabu NOT IN ('MENA', 'Gurtel', 'ERE', 'Procés', 'sobresueldo') AND RIGHT(PalabraTabu, 2) != 'eo'),
+    NumRarito TINYINT CHECK (NumRarito < 20 AND NumRarito NOT IN (2, 3, 5, 7, 11, 13, 17, 19)),
+    NumMasgrande SMALLINT CHECK (NumMasgrande BETWEEN NumRarito AND 1000),
+    PRIMARY KEY (NumMasgrande),
+    FOREIGN KEY (NombreRelacionado) REFERENCES DatosRestrictivos(Nombre)
+	)
+	CREATE TABLE DatosAlMogollon (
+    ID SMALLINT CHECK (ID % 5 != 0),
+    LimiteSuperior SMALLINT CHECK (LimiteSuperior BETWEEN 1500 AND 2000),
+    OtroNumero SMALLINT UNIQUE CHECK (OtroNumero > ID AND OtroNumero < LimiteSuperior),
+    NumeroQueVinoDelMasAlla SMALLINT,
+    Etiqueta VARCHAR(3) CHECK (Etiqueta NOT IN ('lao', 'leo', 'lio', 'luo')),
+    PRIMARY KEY (ID),
+    FOREIGN KEY (NumeroQueVinoDelMasAlla) REFERENCES DatosRelacionados(NumMasgrande)
+	)
+
+	CREATE TABLE Empleados (
+    ID INT IDENTITY(1,1) PRIMARY KEY,       
+    Nombre VARCHAR(100) NOT NULL CHECK (Nombre NOT LIKE '%[0-9]%'),
+    Apellido VARCHAR(100) NOT NULL CHECK (Apellido NOT LIKE '%[^0-9]%'), 
+    Edad INT NOT NULL CHECK (Edad BETWEEN 18 AND 65),
+    FechaContratacion DATE NOT NULL CHECK (FechaContratacion <= GETDATE()),
+    Salario DECIMAL(10, 2) NOT NULL CHECK (Salario BETWEEN 1000 AND 100000 AND Salario % 500 = 0), 
+    Cargo VARCHAR(50) NOT NULL UNIQUE,        
+    Departamento VARCHAR(50) NOT NULL CHECK (NOT (Departamento = 'General' AND Activo = 0)),
+    FechaNacimiento DATE NOT NULL CHECK (FechaNacimiento < FechaContratacion), 
+    Email VARCHAR(100) NOT NULL CHECK (Email LIKE '%@%.__%'), 
+    Activo BIT NOT NULL CHECK (Activo = 0 OR Salario IS NOT NULL), 
+    FechaSalida DATE NULL CHECK (FechaSalida IS NULL OR FechaSalida >= FechaContratacion), 
+    CHECK (DATEDIFF(YEAR, FechaContratacion, GETDATE()) >= 3 OR FechaSalida IS NOT NULL) 
+	)
+
+
+
 

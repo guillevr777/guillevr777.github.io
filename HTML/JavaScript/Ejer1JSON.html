@@ -32,8 +32,8 @@
         <label for="ciudad">Ciudad:</label>
         <input type="text" id="ciudad" name="ciudad" required>
 
-        <label for="ciudad">Edad:</label>
-        <input type="text" id="edad" name="edad" required>
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" name="edad" required>
 
         <button type="button" id="agregar">Añadir</button>
     </form>
@@ -49,63 +49,65 @@
         <tbody id="tabla-cuerpo">
         </tbody>
     </table>
+    <h2>Estadísticas</h2>
+    <p>Edad mayor: <span id="edad-mayor">0</span></p>
+    <p>Edad menor: <span id="edad-menor">0</span></p>
+    <p>Suma de edades: <span id="suma-edades">0</span></p>
+    <p>Multiplicación de edades: <span id="multiplicacion-edades">0</span></p>
 
     <script>
-        function serializar(obj) {
-            return JSON.stringify(obj);
-        }
-        function deserializar(objJson) {
-            return JSON.parse(objJson);
-        }
+        let edades = [];
 
         document.getElementById('agregar').addEventListener('click', function() {
             let nombre = document.getElementById('nombre').value;
             let apellidos = document.getElementById('apellidos').value;
             let ciudad = document.getElementById('ciudad').value;
-            let edad = document.getElementById('edad').value;
+            let edad = parseInt(document.getElementById('edad').value);
 
-            let datos = {
-                nombre: nombre,
-                apellidos: apellidos,
-                ciudad: ciudad,
-                edad: edad
-            };
+            let datos = { nombre, apellidos, ciudad, edad };
 
-            let json_serializado = serializar(datos);
+            // Serialización y deserialización
+            let json_serializado = JSON.stringify(datos);
             console.log("JSON Serializado:", json_serializado);
-
-            let obj_recuperado = deserializar(json_serializado);
+            let obj_recuperado = JSON.parse(json_serializado);
             console.log("Objeto Deserializado:", obj_recuperado);
 
+            // Añadir nueva fila a la tabla
             let nuevaFila = crearFila(obj_recuperado);
-
             document.getElementById('tabla-cuerpo').insertAdjacentHTML('beforeend', nuevaFila);
 
+            // Agregar edad al array y calcular estadísticas
+            edades.push(edad);
+            actualizarEstadisticas();
+
+            // Limpiar formulario
             document.getElementById('formulario').reset();
         });
 
-	        function crearFila(datos) {
-	            return `
-	                <tr>
-	                    <td>${datos.nombre}</td>
-	                    <td>${datos.apellidos}</td>
-	                    <td>${datos.ciudad}</td>
-	                    <td>${datos.edad}</td>
-	                </tr>
-	            `;
-	        }
-	        let calculo = {
-	        	let edades = datos.edad;
-	        	let mayor = datos.edad;
-	        	let menor = datos.edad;
-	        	let suma = datos.edad;
-				let multiplicacion = datos.edad;
-				function (calculo) {
-					
-				}
-	        }
-	        alert("Alerta");
+        function crearFila(datos) {
+            return `
+                <tr>
+                    <td>${datos.nombre}</td>
+                    <td>${datos.apellidos}</td>
+                    <td>${datos.ciudad}</td>
+                    <td>${datos.edad}</td>
+                </tr>
+            `;
+        }
 
-    </script>
-</body>
+        function actualizarEstadisticas() {
+            if (edades.length > 0) {
+                let mayor = Math.max(...edades);
+                let menor = Math.min(...edades);
+                let suma = edades.reduce((acc, edad) => acc + edad, 0);
+                let multiplicacion = edades.reduce((acc, edad) => acc * edad, 1);
+
+                document.getElementById('edad-mayor').textContent = mayor;
+                document.getElementById('edad-menor').textContent = menor;
+                document.getElementById('suma-edades').textContent = suma;
+                document.getElementById('multiplicacion-edades').textContent = multiplicacion;
+            }
+        }
+        </script>
+    </body>
 </html>
