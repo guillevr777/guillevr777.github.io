@@ -1,113 +1,77 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejercicio 2: Datos Dinámicos</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <title>Ejercicio 2: Datos dinámicos</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-    <h1>Ejemplo 2: Datos dinámicos</h1>
-    <form id="formulario">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
-
-        <label for="apellidos">Apellidos:</label>
-        <input type="text" id="apellidos" name="apellidos" required>
-
-        <label for="ciudad">Ciudad:</label>
-        <input type="text" id="ciudad" name="ciudad" required>
-
-        <label for="edad">Edad:</label>
-        <input type="number" id="edad" name="edad" required>
-
-        <button type="button" id="agregar">Añadir</button>
-    </form>
-    <table>
+    <h1>Insertar datos dinámicamente</h1>
+    
+    <!-- Tabla inicial -->
+    <table border="1" id="tabla-datos">
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Ciudad</th>
+                <th>Apellido</th>
                 <th>Edad</th>
+                <th>Ciudad</th>
             </tr>
         </thead>
-        <tbody id="tabla-cuerpo">
+        <tbody>
+            <!-- Aquí se añadirán dinámicamente las filas -->
         </tbody>
     </table>
-    <h2>Estadísticas</h2>
-    <p>Edad mayor: <span id="edad-mayor">0</span></p>
-    <p>Edad menor: <span id="edad-menor">0</span></p>
-    <p>Suma de edades: <span id="suma-edades">0</span></p>
-    <p>Multiplicación de edades: <span id="multiplicacion-edades">0</span></p>
+
+    <!-- Formulario -->
+    <form id="formulario">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" placeholder="Nombre" required><br>
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" placeholder="Apellido" required><br>
+
+        <label for="edad">Edad:</label>
+        <input type="number" id="edad" placeholder="Edad" required><br>
+
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" placeholder="Ciudad" required><br>
+
+        <button type="submit">Agregar</button>
+    </form>
 
     <script>
-        let edades = [];
-
-        document.getElementById('agregar').addEventListener('click', function() {
-            let nombre = document.getElementById('nombre').value;
-            let apellidos = document.getElementById('apellidos').value;
-            let ciudad = document.getElementById('ciudad').value;
-            let edad = parseInt(document.getElementById('edad').value);
-
-            let datos = { nombre, apellidos, ciudad, edad };
-
-            // Serialización y deserialización
-            let json_serializado = JSON.stringify(datos);
-            console.log("JSON Serializado:", json_serializado);
-            let obj_recuperado = JSON.parse(json_serializado);
-            console.log("Objeto Deserializado:", obj_recuperado);
-
-            // Añadir nueva fila a la tabla
-            let nuevaFila = crearFila(obj_recuperado);
-            document.getElementById('tabla-cuerpo').insertAdjacentHTML('beforeend', nuevaFila);
-
-            // Agregar edad al array y calcular estadísticas
-            edades.push(edad);
-            actualizarEstadisticas();
-
-            // Limpiar formulario
-            document.getElementById('formulario').reset();
-        });
-
-        function crearFila(datos) {
+        // Función para generar una nueva fila de la tabla
+        function generaTr(datos) {
             return `
                 <tr>
                     <td>${datos.nombre}</td>
-                    <td>${datos.apellidos}</td>
-                    <td>${datos.ciudad}</td>
+                    <td>${datos.apellido}</td>
                     <td>${datos.edad}</td>
+                    <td>${datos.ciudad}</td>
                 </tr>
             `;
         }
 
-        function actualizarEstadisticas() {
-            if (edades.length > 0) {
-                let mayor = Math.max(...edades);
-                let menor = Math.min(...edades);
-                let suma = edades.reduce((acc, edad) => acc + edad, 0);
-                let multiplicacion = edades.reduce((acc, edad) => acc * edad, 1);
+        // Manejo del formulario
+        $("#formulario").on("submit", function(event) {
+            event.preventDefault(); // Evitar recargar la página
 
-                document.getElementById('edad-mayor').textContent = mayor;
-                document.getElementById('edad-menor').textContent = menor;
-                document.getElementById('suma-edades').textContent = suma;
-                document.getElementById('multiplicacion-edades').textContent = multiplicacion;
-            }
-        }
-        </script>
-    </body>
+            // Crear un objeto con los datos del formulario
+            let datos = {
+                nombre: $("#nombre").val(),
+                apellido: $("#apellido").val(),
+                edad: $("#edad").val(),
+                ciudad: $("#ciudad").val()
+            };
+
+            // Añadir la nueva fila al tbody de la tabla
+            $("#tabla-datos tbody").append(generaTr(datos));
+
+            // Limpiar el formulario
+            $(this)[0].reset();
+        });
+    </script>
+</body>
 </html>
