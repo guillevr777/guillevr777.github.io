@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Latitud y Longitud por IP</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h2>Buscar Ubicación por IP</h2>
+    <input type="text" id="ipInput" placeholder="Introduce una dirección IP">
+    <button id="buscarIP">Buscar</button>
+
+    <p><strong>IP:</strong> <span id="ip"></span></p>
+    <p><strong>Latitud:</strong> <span id="latitud"></span></p>
+    <p><strong>Longitud:</strong> <span id="longitud"></span></p>
+
+    <script>
+        $(document).ready(function() {
+            $("#buscarIP").click(function() {
+                let ip = $("#ipInput").val().trim();
+                
+                if (ip === "") {
+                    alert("Por favor, introduce una dirección IP válida.");
+                    return;
+                }
+
+                $.getJSON(`http://ip-api.com/json/${ip}`, function(data) {
+                    if (data.status === "success") {
+                        $("#ip").text(data.query);
+                        $("#latitud").text(data.lat);
+                        $("#longitud").text(data.lon);
+                    } else {
+                        alert("No se pudo obtener la ubicación de la IP ingresada.");
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

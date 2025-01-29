@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Json</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Carga correcta de jQuery -->
+</head>
+<body>
+
+    <form>
+        <label>Nombre</label>
+        <input id="nombre" name="nombre" type="text">
+        <label>Correo</label>
+        <input id="correo" name="correo" type="text">
+    </form>
+
+    <button id="GetXHR">XHR</button>
+    <button id="GetAJAX">AJAX</button>
+    <button id="GetJQUERY">JQUERY</button>
+    <button id="PostXHR">XHR</button>
+    <button id="PostAJAX">AJAX</button>
+    <button id="PostJQUERY">JQUERY</button>
+
+    <script type="text/javascript">
+        // GET con XMLHttpRequest (XHR)
+        $("#GetXHR").click(function() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://jsonplaceholder.typicode.com/users");
+            xhr.responseType = "json";
+
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    console.log(xhr.response);
+                } else {
+                    console.log(`Error: ${xhr.status}`);
+                }
+            };
+            xhr.send();
+        });
+
+        // POST con XMLHttpRequest (XHR)
+        $("#PostXHR").click(function() {
+            let datos = {
+                nombre: $("#nombre").val(),
+                correo: $("#correo").val()
+            };
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://jsonplaceholder.typicode.com/posts");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.responseType = "json";
+
+            xhr.onload = function() {
+                if (xhr.status == 201) {
+                    console.log(xhr.response);
+                } else {
+                    console.log(`Error: ${xhr.status}`);
+                }
+            };
+            xhr.send(JSON.stringify(datos));
+        });
+
+        // GET con jQuery AJAX
+        $("#GetAJAX").click(function() {
+            $.ajax({
+                url: "https://jsonplaceholder.typicode.com/users",
+                method: "GET",
+                dataType: "json",
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        });
+
+        // POST con jQuery AJAX
+        $("#PostAJAX").click(function() {
+            let datos = {
+                nombre: $("#nombre").val(),
+                correo: $("#correo").val()
+            };
+
+            $.ajax({
+                url: "https://jsonplaceholder.typicode.com/posts",
+                method: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(datos),
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        });
+
+        // GET con jQuery .get()
+        $("#GetJQUERY").click(function() {
+            $.get("https://jsonplaceholder.typicode.com/users")
+                .done(function(data) {
+                    console.log(data);
+                })
+                .fail(function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                });
+        });
+
+        // POST con jQuery .post()
+        $("#PostJQUERY").click(function() {
+            let datos = {
+                nombre: $("#nombre").val(),
+                correo: $("#correo").val()
+            };
+
+            $.post("https://jsonplaceholder.typicode.com/posts", JSON.stringify(datos))
+                .done(function(response) {
+                    console.log(response);
+                })
+                .fail(function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                });
+        });
+    </script>
+
+</body>
+</html>
