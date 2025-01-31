@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información del Equipo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Buscar equipo de la Premier League</h2>
+    <input type="text" id="equipo" placeholder="Introduce un equipo">
+    <button id="buscarEquipo">Buscar</button>
+    
+    <div id="resultado" style="margin-top: 20px; display: none;">
+        <h3>Información del equipo</h3>
+        <p><strong>Nombre:</strong> <span id="nombre"></span></p>
+        <p><strong>Estadio:</strong> <span id="estadio"></span></p>
+        <p><strong>Ubicación:</strong> <span id="ubicacion"></span></p>
+        <p><strong>Descripción:</strong> <span id="descripcion"></span></p>
+        <img id="logo" src="" alt="Logo del equipo" style="max-width: 200px; margin-top: 10px;">
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#buscarEquipo").click(function() {
+                let equipo = $("#equipo").val().trim();
+                
+                if (equipo === "") {
+                    alert("Por favor, introduce un nombre de equipo válido.");
+                    return;
+                }
+
+                $.getJSON(`https://thesportsdb.com/api/v1/json/3/searchteams.php?t=${equipo}`, function(data) {
+                    if (data.teams) {
+                        let team = data.teams[0];
+                        $("#nombre").text(team.strTeam);
+                        $("#estadio").text(team.strStadium);
+                        $("#ubicacion").text(team.strStadiumLocation);
+                        $("#descripcion").text(team.strDescriptionES || "Descripción no disponible");
+                        $("#logo").attr("src", team.strTeamBadge);
+                        $("#resultado").show();
+                    } else {
+                        alert("No se encontró el equipo. Prueba con otro nombre.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
