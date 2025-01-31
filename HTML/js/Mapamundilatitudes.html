@@ -26,17 +26,18 @@
                     return;
                 }
 
-                $.getJSON(`http://ip-api.com/json/${ip}`, function(data) {
+                $.getJSON(`http://ipwho.is/${ip}`, function(data) {
                     if (data.status === "success") {
                         $("#ip").text(data.query);
                         $("#latitud").text(data.lat);
                         $("#longitud").text(data.lon);
                     } else {
-                        alert("No se pudo obtener la ubicación de la IP ingresada.");
+                        alert("No se encuentra la ip.");
                     }
                 });
             });
         });
     </script>
+
 </body>
 </html>
