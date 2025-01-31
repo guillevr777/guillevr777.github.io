@@ -26,7 +26,7 @@
                     return;
                 }
 
-                $.getJSON(`http://ipwho.is/${ip}`, function(data) {
+                $.getJSON(`http://ip-api.com/json/${ip}`, function(data) {
                     if (data.status === "success") {
                         $("#ip").text(data.query);
                         $("#latitud").text(data.lat);
