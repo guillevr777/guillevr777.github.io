@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Simple</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+    <h2>Formulario</h2>
+
+    <input type="text" id="nombre" placeholder="Nombre">
+    <input type="text" id="apellido" placeholder="Apellido">
+    <button id="boton">Guardar y Mostrar</button>
+
+    <h3>Datos Recuperados:</h3>
+    <p id="resultado"></p>
+
+    <script>
+         $(document).ready(function() {
+            $("#boton").click(function() {
+                // 1️⃣ Materializar: Crear el JSON
+                let datos = JSON.stringify({
+                    nombre: $("#nombre").val(),
+                    apellido: $("#apellido").val()
+                });
+
+                // 2️⃣ Desmaterializar: Convertir JSON a objeto
+                let objeto = JSON.parse(datos);
+
+                // 3️⃣ Mostrar los datos
+                $("#resultado").text(`Nombre: ${objeto.nombre}, Apellido: ${objeto.apellido}`);
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 1: JSON en JavaScript</title>
+</head>
+<body>
+    <h1>Bienvenido al ejercicio 1</h1>
+    <button onclick="operacion()">click aqui</button>
+    <div id="tabla"></div>
+    <script>
+       let lista = {Nombre:"Guillermo",Apellido:"Villanueva",Edad:"20"};
+
+       function serializar(obj) {
+            return JSON.stringify(obj);
+       }
+       function deserializar(obJson) {
+            return JSON.parse(obJson);
+       }
+       function operacion() {
+            let json_serializado = serializar(lista);
+            console.log(json_serializado);
+
+            let obj_recuperado = deserializar(json_serializado);
+            console.log(obj_recuperado);
+
+            document.getElementById("tabla").innerHTML =
+            `<table border="1">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                </tr>
+                <tr>
+                    <td>${obj_recuperado.Nombre}</td>
+                    <td>${obj_recuperado.Apellido}</td>
+                    <td>${obj_recuperado.Edad}</td>
+                </tr>
+            </table>`;   
+       }
+    </script>
+</body>
+</html>
