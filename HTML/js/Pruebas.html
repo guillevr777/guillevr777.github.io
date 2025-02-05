@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Tablas Dinamicas</title>
+</head>
+<body>
+	<h1>Bienvenido a la tabla dinamica</h1>
+	<form id="miFormulario">
+		<label for="Nombre">Nombre:</label>
+		<input type="text" id="Nombre"></input><br><br>
+		<label for="Apellido">Apellido:</label>
+		<input type="text" id="Apellido"></input><br><br>
+		<label for="Edad">Edad:</label>
+		<input type="" id="Edad"></input><br><br>
+		<label for="Ciudad">Ciudad:</label>
+		<input type="text" id="Ciudad"></input><br><br>
+	</form>
+	<button type="button" onclick="materializar()">Click aqui</button>
+ <table border = "1">
+	<thead>
+		<tr>
+			<th>Nombre</th>
+			<th>Apellido</th>
+			<th>Edad</th>
+			<th>Ciudad</th>
+		</tr>
+	</thead>
+	<tbody id="tabla">
+	</tbody>
+ </table>
+ <script type="text/javascript">
+ 	document.getElementById("miFormulario").addEventListener("submit", function(event) {
+        event.preventDefault();
+        materializar();
+    });
+
+ 	function serializar(obj) {
+ 		return JSON.stringify(obj);
+ 	}
+ 	function deserializar(obJson) {
+ 		return JSON.parse(obJson);
+ 	}
+ 	function materializar() {
+ 		let lista = {Nombre:document.getElementById("Nombre").value,
+ 		Apellido: document.getElementById("Apellido").value,
+ 		Edad:document.getElementById("Edad").value,
+ 		Ciudad:document.getElementById("Ciudad").value};
+ 		
+ 		let obj_json = serializar(lista);
+ 		let obj_serializado = deserializar(obj_json);
+ 		document.getElementById("tabla").innerHTML +=`
+ 		   	<tr>
+ 				<td>${obj_serializado.Nombre}</td>
+	 			<td>${obj_serializado.Apellido}</td>
+	 			<td>${obj_serializado.Edad}</td>
+	 			<td>${obj_serializado.Ciudad}</td>
+ 			<tr>`;
+ 	}
+ </script>
+</body>
+</html>
