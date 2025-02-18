@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ejercicio 4 Reto</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Bienvenido a la tabla dinámica</h1>
+    <form id="miFormulario">
+        <label for="id">id:</label>
+        <input type="text" id="id"><br><br>
+
+        <label for="descripcion">descripcion:</label>
+        <input type="text" id="descripcion"><br><br>
+
+        <label for="idProveedor">idProveedor:</label>
+        <input type="number" id="idProveedor"><br><br>
+
+        <label for="precio">precio:</label>
+        <input type="text" id="precio"><br><br>
+    </form>
+
+    <button type="button" id="boton">Pincha aquí</button>
+
+    <table border="1" id="tabla">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>descripcion</th>
+                <th>idProveedor</th>
+                <th>precio</th>
+            </tr>
+        </thead>
+        <tbody id="tabla"></tbody>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $("#boton").click(function () {
+
+            	let datos = {
+		            id = $("#id").val();
+		            descripcion = $("#descripcion").val();
+		            idProveedor = $("#idProveedor").val();
+		            precio = $("#precio").val();
+		           }
+
+		        $("datos").stringify(function() 
+
+                    let nuevaFila = `<tr>
+                        <td>${id}</td>
+                        <td>${descripcion}</td>
+                        <td>${idProveedor}</td>
+                        <td>${precio}</td>
+                    </tr>`;
+
+                    $("#tabla").append(nuevaFila);
+                    $("#miFormulario")[0].reset(); // Limpia los campos después de agregar la fila
+            });
+        });
+    </script>
+</body>
+</html>
