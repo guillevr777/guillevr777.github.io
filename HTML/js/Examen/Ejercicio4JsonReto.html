@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EJ4 RETO</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Insertar datos dinámicos</h1>
+    <form onsubmit="event.preventDefault(); crearObj();"> 
+        <label for="DESCRIPCION">DESCRIPCION:</label>
+        <br> 
+        <input type="text" id="DESCRIPCION" name="DESCRIPCION">
+        <br> 
+        <label for="PROVEEDOR">PROVEEDOR:</label>
+        <br> 
+        <input type="number" id="PROVEEDOR" name="PROVEEDOR">
+        <br> 
+        <label for="PRECIO">PRECIO:</label>
+        <br> 
+        <input type="number" id="PRECIO" name="PRECIO" step="0.01">
+        <br><br> 
+        <button type="submit">Enviar Datos</button> 
+    </form>
+    <br>
+    <p id="Error" style="color: red;"></p>
+    <br>
+    <h2>DATOS BBDD</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>DESCRIPCION</th>
+                <th>PROVEEDOR</th>
+                <th>PRECIO</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        function crearObj() {
+            let objJson = {
+                descripcion: $("#DESCRIPCION").val(),
+                idProveedor: $("#PROVEEDOR").val(),
+                precio: parseFloat(parseFloat($("#PRECIO").val()).toFixed(2))
+            };
+
+            if (comprobar(objJson) != null) {
+                enviarDatos(objJson);
+            }
+        }
+
+        function comprobar(objJson) {
+            if (!objJson.descripcion || !objJson.idProveedor || !objJson.precio) {
+                alert("Todos los campos son obligatorios.");
+                return null;
+            }
+            return objJson;
+        }
+
+        function enviarDatos(objJson) {
+            $.ajax({
+                url: "https://lm.iesnervion.es/reto4.php",
+                method: "POST",
+                data: JSON.stringify(objJson),
+                contentType: "application/json", 
+                dataType: "json",
+                success: function(response) {
+                    console.log("Respuesta del servidor:", response);
+                    if (response.error) {
+                        imprimirError(response.error);
+                    } else {
+                        imprimirDatos(response.lista);
+                        imprimirError("Todo fue OK.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    imprimirError(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        }
+
+        function imprimirDatos(lista) {
+            $("#dataTable tbody").empty(); // Limpiar la tabla antes de agregar nuevos datos
+            lista.forEach(function(item) {
+                let fila = '<tr>'+
+                            '<td onclick="eliminarFila('+item.id+')">' + item.id + '</td>'+
+                            '<td>' + item.descripcion + '</td>'+
+                            '<td>' + item.idProveedor + '</td>'+
+                            '<td>' + item.precio + '</td>'+
+                            '</tr>';
+                $("#dataTable tbody").append(fila);
+            });
+        }
+
+        function imprimirError(mensaje) {
+            $("#Error").html("<h2><b>" + mensaje + "</b></h2>");
+        }
+
+        function eliminarFila(id){
+            const xhr = new XMLHttpRequest();
+            xhr.open("DELETE", `https://lm.iesnervion.es/reto4.php?id=${id}`, true);
+            xhr.responseType = "json"; 
+            xhr.onload = function() {
+                if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
+                    imprimirError("Se ha eliminado correctamente.");
+                    imprimirDatos(xhr.response.lista);
+                } else {
+                    console.log(`Error: ${xhr.status}`);
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

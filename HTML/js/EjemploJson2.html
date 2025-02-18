@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formulario con Tabla</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Formulario con Tabla</h2>
+
+<form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="apellido" placeholder="Apellido" required>
+    <input type="number" id="edad" placeholder="Edad" required>
+    <input type="text" id="ciudad" placeholder="Ciudad" required>
+    <button type="submit">Agregar</button>
+</form>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Edad</th>
+            <th>Ciudad</th>
+        </tr>
+    </thead>
+    <tbody id="tabla">
+        <!-- Filas agregadas dinámicamente -->
+    </tbody>
+</table>
+
+<h3>Estadísticas</h3>
+<div id="estadisticas">
+    Suma: <span id="suma">0</span> | 
+    Media: <span id="media">0</span> | 
+    Máximo: <span id="maximo">0</span> | 
+    Mínimo: <span id="minimo">0</span>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#formulario").submit(function(event) {
+            event.preventDefault();
+
+            let nombre = $("#nombre").val();
+            let apellido = $("#apellido").val();
+            let edad = $("#edad").val();
+            let ciudad = $("#ciudad").val();
+
+            // Validar que todos los campos estén llenos
+            if (nombre === "" || apellido === "" || edad === "" || ciudad === "") {
+                alert("Todos los campos son obligatorios.");
+                return;
+            }
+
+            edad = parseInt(edad); // Convertir edad a número
+
+            // Agregar fila a la tabla
+            $("#tabla").append(`
+                <tr onclick="eliminar(this)">
+                    <td>${nombre}</td>
+                    <td>${apellido}</td>
+                    <td class="edad">${edad}</td>
+                    <td>${ciudad}</td>
+                </tr>
+            `);
+
+            // Actualizar estadísticas
+            actualizarEstadisticas();
+
+            // Limpiar formulario
+            $("#formulario")[0].reset();
+        });
+    });
+
+    function eliminar(fila) {
+        $(fila).remove();
+        actualizarEstadisticas();
+    }
+
+    function actualizarEstadisticas() {
+        let edades = $(".edad").map(function() {
+            return parseInt($(this).text());
+        }).get();
+
+        if (edades.length === 0) {
+            $("#suma").text(0);
+            $("#media").text(0);
+            $("#maximo").text(0);
+            $("#minimo").text(0);
+            return;
+        }
+
+        let suma = edades.reduce((a, b) => a + b, 0);
+        let media = suma / edades.length;
+        let maximo = Math.max(...edades);
+        let minimo = Math.min(...edades);
+
+        $("#suma").text(suma);
+        $("#media").text(media.toFixed(2));
+        $("#maximo").text(maximo);
+        $("#minimo").text(minimo);
+    }
+</script>
+</body>
+</html>

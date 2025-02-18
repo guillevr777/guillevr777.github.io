@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ejer 2</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<form id="formulario">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="apellido" placeholder="Apellido" required>
+        <input type="number" id="edad" placeholder="Edad" required>
+        <input type="text" id="ciudad" placeholder="Ciudad" required>
+        <button type="submit">Agregar</button>
+    </form>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Edad</th>
+				<th>Ciudad</th>
+			</tr>
+		</thead>
+		<tbody id="cuerpo"></tbody>
+	</table>
+	<div id="estadisticas"></div>
+	
+	<script type="text/javascript">
+		$(document).ready(function () {
+            $("#formulario").submit(function (event) {
+                event.preventDefault(); // Evita el refresco de la página
+                
+                // Crear objeto con los datos del formulario
+                let persona = {
+                    nombre: $("#nombre").val(),
+                    apellido: $("#apellido").val(),
+                    edad: $("#edad").val(),
+                    ciudad: $("#ciudad").val()
+                };
+
+                // Serializar y deserializar JSON
+                let json_serializado = JSON.stringify(persona);
+                console.log("Serializado: ", json_serializado);
+                let obj_recuperado = JSON.parse(json_serializado);
+                console.log("Recuperado: ", obj_recuperado);
+
+                // Crear nueva fila con los datos ingresados
+                function generaTr(objeto_recuperado) {
+                return `<tr>
+                   <td>${obj_recuperado.nombre}</td>
+                   <td>${obj_recuperado.apellido}</td>
+                   <td>${obj_recuperado.edad}</td>
+                   <td>${obj_recuperado.ciudad}</td>
+                </tr>`
+                }
+
+                // Agregar fila a la tabla
+                $("#cuerpo").append(generaTr(obj_recuperado));
+
+                // Limpiar el formulario
+                $("#formulario")[0].reset();
+            });
+
+            // Al hacer clic en una fila, se elimina
+            $(document).on("click", "#cuerpo tr", function () {
+                $(this).remove();
+            });
+        });
+	</script>
+</body>
+</html>

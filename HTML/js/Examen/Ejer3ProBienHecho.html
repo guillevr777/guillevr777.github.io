@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio 3: Listas</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Ejemplo 3: Listas</h2>
+    <form id="userForm">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="apellidos" placeholder="Apellidos" required>
+        <input type="number" id="edad" placeholder="Edad" required>
+        <input type="text" id="ciudad" placeholder="Ciudad" required>
+        <br><br>
+        <label>Hobbies:</label><br>
+        <input type="checkbox" name="hobbies" value="Deporte"> Deporte
+        <input type="checkbox" name="hobbies" value="Lectura"> Lectura
+        <input type="checkbox" name="hobbies" value="Música"> Música
+        <input type="checkbox" name="hobbies" value="Juegos"> Juegos
+        <input type="checkbox" name="hobbies" value="Cine"> Cine
+        <input type="checkbox" name="hobbies" value="Teatro"> Teatro
+        <input type="checkbox" name="hobbies" value="Coleccionismo"> Coleccionismo
+        <input type="checkbox" name="hobbies" value="Bricolaje"> Bricolaje
+        <input type="checkbox" name="hobbies" value="Cosplay"> Cosplay
+        <br><br>
+        <button type="button" id="insertar">Insertar</button>
+    </form>
+    <br>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Edad</th>
+                <th>Ciudad</th>
+                <th>Hobbies</th>
+            </tr>
+        </thead>
+        <tbody id="tablaUsuarios"></tbody>
+    </table>
+    
+    <script>
+        $(document).ready(function () {
+
+        	$("input[name='hobbies']").change(function () {
+                if ($("input[name='hobbies']:checked").length >= 3) {
+                    $("input[name='hobbies']").not(":checked").prop("disabled", true);
+                } else {
+                    $("input[name='hobbies']").prop("disabled", false);
+                }
+            });
+
+            $("#insertar").click(function () {
+                let nombre = $("#nombre").val();
+                let apellidos = $("#apellidos").val();
+                let edad = $("#edad").val();
+                let ciudad = $("#ciudad").val();
+                let hobbies = $("input[name='hobbies']:checked").map(function () {
+                    return $(this).val();
+                }).get().join(", ");
+                
+                if (nombre && apellidos && edad && ciudad) {
+                    let nuevaFila = "<tr><td>" + nombre + "</td><td>" + apellidos + "</td><td>" + edad + "</td><td>" + ciudad + "</td><td>" + hobbies + "</td></tr>";
+                    $("#tablaUsuarios").append(nuevaFila);
+                    $("#userForm")[0].reset(); // Limpiar formulario
+                } else {
+                    alert("Por favor, complete todos los campos.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

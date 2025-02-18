@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FUTBOLEROS</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<h1>CONOCE LOS DATOS DE TU EQUIPO</h1>
+<form onsubmit="event.preventDefault(); solicitudAjax();">
+    <label for="nombre">Nombre:</label>
+    <br> 
+    <input type="text" id="nombre" name="nombre">
+    <br> 
+    <button type="submit">Recibir Datos</button> 
+</form>
+
+<script>
+    function solicitudAjax() { 
+        var nombre = document.getElementById("nombre").value;
+        $.ajax({ 
+            url: "https://thesportsdb.com/api/v1/json/3/searchteams.php?t=" + encodeURIComponent(nombre), 
+            method: "GET", 
+            dataType: "json",
+            success: function(data) {
+                console.log(data); 
+            }, 
+            error: function(xhr, status, error) {
+                console.log(`Error: ${xhr.status} - ${error}`);
+            } 
+        });
+    }
+</script>
+</body>
+</html>

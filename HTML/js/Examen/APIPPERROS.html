@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PERROS</title>
+    <!-- Enlace a Bootstrap CSS para mejorar el diseño de la página -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Enlace a la librería jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container mt-5">
+    <h1 class="text-center mb-4">Perros</h1>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <!-- Formulario con un selector y un botón -->
+            <form onsubmit="event.preventDefault(); solicitudImagenRaza();">
+                <div class="form-group">
+                    <!-- Selector para elegir una raza de perro -->
+                    <label for="selectorRazas">Selecciona una raza:</label>
+                    <select class="form-control" id="selectorRazas"></select>
+                </div>
+                <!-- Botón para obtener la foto de la raza seleccionada -->
+                <button type="submit" class="btn btn-primary btn-block">Foto de la raza seleccionada</button>
+            </form>
+            <br>
+            <!-- Div donde se mostrará la imagen del perro -->
+            <div id="imagenPerro" class="text-center"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Ejecución al cargar la página
+        $(document).ready(function() {
+            // Llamada AJAX para obtener la lista de razas de perros
+            $.ajax({
+                url: "https://dog.ceo/api/breeds/list/all", // URL del API para obtener la lista de razas
+                method: "GET", // Método HTTP
+                dataType: "json", // Tipo de datos esperados de la respuesta
+                success: function(data) {
+                    // Callback para cuando la solicitud es exitosa
+                    var selector = $('#selectorRazas');
+                    var razas = data.message; // Lista de razas
+                    // Iterar sobre cada raza en la lista
+                    for (var raza in razas) {
+                        if (razas[raza].length === 0) {
+                            // Añadir opción al selector para razas sin subcategorías
+                            selector.append(new Option(raza, raza));
+                        } else {
+                            // Añadir opciones al selector para razas con subcategorías
+                            for (var i = 0; i < razas[raza].length; i++) {
+                                // El valor del option ya estaría formateado como raza/subraza
+                                selector.append(new Option(`${razas[raza][i]} ${raza}`, `${raza}/${razas[raza][i]}`));
+                            }
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Callback para manejar errores en la solicitud
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        });
+
+        // Función para obtener una imagen de una raza seleccionada
+        function solicitudImagenRaza() {
+            var seleccion = $('#selectorRazas').val(); // Obtener el valor seleccionado del selector
+            var url = "https://dog.ceo/api/breed/" + seleccion + "/images/random"; // URL del API para obtener la imagen de la raza
+
+            // Llamada AJAX para obtener la imagen de la raza seleccionada
+            $.ajax({
+                url: url, // URL generada dinámicamente
+                method: "GET", // Método HTTP
+                dataType: "json", // Tipo de datos esperados de la respuesta
+                success: function(data) {
+                    // Callback para cuando la solicitud es exitosa
+                    mostrarImagen(data); // Llamada a la función para mostrar la imagen
+                },
+                error: function(xhr, status, error) {
+                    // Callback para manejar errores en la solicitud
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        }
+
+        // Función para mostrar la imagen del perro en el div correspondiente
+        function mostrarImagen(data) {
+            // Crear un elemento img con la URL de la imagen obtenida
+            var imagen = `<img src="${data.message}" class="img-fluid" alt="Imagen de un perro">`;
+            // Insertar el elemento img en el div con id "imagenPerro"
+            $('#imagenPerro').html(imagen);
+        }
+    </script>
+</body>
+</html>
