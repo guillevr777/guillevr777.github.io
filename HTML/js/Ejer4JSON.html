@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EJ4</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Insertar datos dinámicos</h1>
+    <form onsubmit="event.preventDefault(); enviarDatos();"> 
+        <label for="nombre">Nombre:</label>
+        <br> 
+        <input type="text" id="nombre" name="nombre">
+        <br> 
+        <label for="apellidos">Apellidos:</label>
+        <br> 
+        <input type="text" id="apellidos" name="apellidos">
+        <br> 
+        <label for="edad">Edad:</label>
+        <br> 
+        <input type="number" id="edad" name="edad">
+        <br> 
+        <label for="ciudad">Ciudad:</label>
+        <br> 
+        <input type="text" id="ciudad" name="ciudad">
+        <br>
+        <label for="hobbies">Hobbies:</label>
+        <br>
+        <label>Deporte </label>
+        <input type="checkbox" name="hobbies" value="Deporte">
+        <br>
+        <label>Lectura </label>
+        <input type="checkbox" name="hobbies" value="Lectura">
+        <br>
+        <label>Música </label>
+        <input type="checkbox" name="hobbies" value="Música">
+        <br>
+        <label>Juegos </label>
+        <input type="checkbox" name="hobbies" value="Juegos">
+        <br>
+        <label>Cine </label>
+        <input type="checkbox" name="hobbies" value="Cine">
+        <br>
+        <label>Teatro </label>
+        <input type="checkbox" name="hobbies" value="Teatro">
+        <br>
+        <label>Coleccionismo </label>
+        <input type="checkbox" name="hobbies" value="Coleccionismo">
+        <br>
+        <label>Bricolaje </label>
+        <input type="checkbox" name="hobbies" value="Bricolaje">
+        <br>
+        <label>Cosplay </label>
+        <input type="checkbox" name="hobbies" value="Cosplay">
+        <br><br> 
+        <button type="submit">Enviar Datos</button> 
+    </form>
+    <h2>Datos Personales</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Edad</th>
+                <th>Ciudad</th>
+                <th>Hobbies</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se añadirán las filas generadas dinámicamente -->
+        </tbody>
+    </table>
+    <h2>Estadísticas de Edades</h2>
+    <p id="estadisticas"></p>
+
+    <script type="text/javascript">
+        let filas = [];
+
+        $(document).ready(function() {
+            $("input[name='hobbies']").change(function() {
+                let max = 3;
+                if ($("input[name='hobbies']:checked").length > max) {
+                    this.checked = false;
+                    alert("Solo puedes seleccionar un máximo de " + max + " hobbies.");
+                }
+            });
+        });
+
+        // ENVIO CON AJAX
+        function enviarDatos() {
+            let nuevoObjeto = generarObj();
+            // SI EL OBJETO SE CREA CORRECTAMENTE SE ENVÍAN LOS DATOS
+            if (nuevoObjeto) {
+                filas.push(nuevoObjeto);
+                serializar(filas);
+                $.ajax({
+                    url: 'https://lm.iesnervion.es/eco.php',
+                    type: 'POST',
+                    data: JSON.stringify(filas),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        console.log("Respuesta del servidor:", response);
+                        mostrarRespuesta(response);
+                    }
+                });
+            }
+        }
+
+        function generarObj() {
+            let objJson = {
+                nombre: $("#nombre").val(),
+                apellidos: $("#apellidos").val(),
+                edad: $("#edad").val(),
+                ciudad: $("#ciudad").val(),
+                hobbies: $("input[name='hobbies']:checked")
+                    .map(function() {
+                        return $(this).val();
+                    }).get().join(", ")
+            };
+
+            if (!objJson.nombre || !objJson.apellidos || !objJson.edad || !objJson.ciudad) {
+                alert("Todos los campos son obligatorios.");
+                return null;
+            }
+
+            let fila = generaTr(objJson);
+            $("#dataTable tbody").append(fila);
+            actualizarEstadisticas();
+            return objJson;
+        }
+
+        function generaTr(objJson) {
+            let fila = "<tr>"+
+                        "<td>" + objJson.nombre + "</td>"+
+                        "<td>" + objJson.apellidos + "</td>"+
+                        "<td>" + objJson.edad + "</td>"+
+                        "<td>" + objJson.ciudad + "</td>"+
+                        "<td>" + objJson.hobbies + "</td>"+
+                        "</tr>";
+            return fila;
+        }
+
+        function serializar(array) {
+            let filasSerializado = JSON.stringify(array);
+            generaTabla(filasSerializado);
+        }
+
+        function generaTabla(filasSerializado) {
+            let filasDeserializado = JSON.parse(filasSerializado);
+            $("#dataTable tbody").empty();
+            filasDeserializado.forEach(function(fila) {
+                let filaHtml = generaTr(fila);
+                $("#dataTable tbody").append(filaHtml);
+            });
+        }
+
+        function mostrarRespuesta(response) {
+            $("#estadisticas").html(
+                "Suma de edades: " + response.suma + "<br>" +
+                "Media de edades: " + response.media + "<br>" +
+                "Edad máxima: " + response.max + "<br>" +
+                "Edad mínima: " + response.min
+            );
+        }
+
+        function actualizarEstadisticas() {
+            let edades = [];
+            $("#dataTable tbody tr").each(function() {
+                let edad = parseInt($(this).find("td:eq(2)").text());
+                edades.push(edad);
+            });
+
+            if (edades.length > 0) {
+                let suma = edades.reduce((a, b) => a + b, 0);
+                let media = suma / edades.length;
+                let maximo = Math.max(...edades);
+                let minimo = Math.min(...edades);
+
+                $("#estadisticas").html(
+                    "Suma de edades: " + suma + "<br>" +
+                    "Media de edades: " + media + "<br>" +
+                    "Edad máxima: " + maximo + "<br>" +
+                    "Edad mínima: " + minimo
+                );
+            } else {
+                $("#estadisticas").html("No hay datos de edad.");
+            }
+        }
+    </script>
+</body>
+</html>

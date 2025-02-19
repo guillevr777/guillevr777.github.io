@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejercicio 2: MEGARETO</title>
+</head>
+<body>
+    <h1>Ejercicio 2: MEGARETO</h1>
+
+    <!-- Formulario para añadir filas -->
+    <form id="formulario">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="apellido" placeholder="Apellido" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <!-- Tabla para mostrar los datos -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+            </tr>
+        </thead>
+        <tbody id="tabla"></tbody>
+    </table>
+
+    <script>
+        // Array para almacenar los datos
+        let datos = [];
+
+        // Escucha el evento 'submit' del formulario
+        document.getElementById('formulario').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evitar que se recargue la página
+            const nombre = document.getElementById('nombre').value;
+            const apellido = document.getElementById('apellido').value;
+
+            agregarFila(nombre, apellido);
+            this.reset(); // Limpiar el formulario
+        });
+
+        // Función para agregar una fila al array y actualizar la tabla
+        function agregarFila(nombre, apellido) {
+            const nuevaFila = { nombre, apellido }; // Crear un objeto simple
+            datos.push(nuevaFila); // Añadir al array
+            actualizarTabla(); // Actualizar la tabla
+        }
+
+        // Función para actualizar la tabla HTML
+        function actualizarTabla() {
+            const tabla = document.getElementById('tabla');
+            tabla.innerHTML = ''; // Vaciar la tabla antes de actualizar
+
+            datos.forEach((fila, indice) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${fila.nombre}</td>
+                    <td>${fila.apellido}</td>
+                `;
+
+                // Al hacer clic en la fila, se eliminará del array
+                tr.addEventListener('click', function() {
+                    datos.splice(indice, 1); // Eliminar la fila del array
+                    actualizarTabla(); // Volver a renderizar la tabla
+                });
+
+                tabla.appendChild(tr); // Añadir la fila a la tabla
+            });
+        }
+    </script>
+</body>
+</html>

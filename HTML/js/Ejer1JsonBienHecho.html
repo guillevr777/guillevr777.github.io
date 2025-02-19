@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Json 1</title>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<button id="boton">Pincha aqui</button>
+	<table border="1">
+		<tr>
+			<th>Nombre</th>
+			<th>Apellidos</th>
+			<th>Edad</th>
+			<th>Ciudad</th>
+		</tr>
+		<tr>
+			<td id="nombre"></td>
+			<td id="apellido"></td>
+			<td id="edad"></td>
+			<td id="ciudad"></td>
+		</tr>
+	</table>
+	<script>
+		let persona = { nombre:"guillermo",
+			apellido:"villanueva",
+			edad:20,
+			ciudad:"sevilla"}
+
+		function serializar(obj){
+			return JSON.stringify(obj)
+		}
+		function deserializar(objJson){
+			return JSON.parse(objJson)
+		}
+
+		 document.getElementById("boton").addEventListener("click", function () {
+
+		json_serializado = serializar(persona);
+			console.log(json_serializado);
+		obj_recuperado = deserializar(json_serializado);
+			console.log(obj_recuperado);
+
+		let texto = "Nombre:" + obj_recuperado.nombre;
+		texto += ", Apellido:" + obj_recuperado.apellidos; 
+		texto += ", Edad:" + obj_recuperado.edad;
+		texto += ", Ciudad:" + obj_recuperado.ciudad; 
+
+		console.log("Recuperado: " + texto);
+
+		$("#deserializado").text("Recuperado: " + texto);
+
+		document.getElementById("nombre").textContent = obj_recuperado.nombre;
+		document.getElementById("apellido").textContent = obj_recuperado.apellido;
+		document.getElementById("edad").textContent = obj_recuperado.edad;
+		document.getElementById("ciudad").textContent = obj_recuperado.ciudad;
+
+		});
+	</script>
+</body>
+</html>

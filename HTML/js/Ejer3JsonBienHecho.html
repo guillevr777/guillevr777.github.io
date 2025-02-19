@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ejer 2</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <form id="formulario">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="text" id="apellido" placeholder="Apellido" required>
+        <input type="number" id="edad" placeholder="Edad" required>
+        <input type="text" id="ciudad" placeholder="Ciudad" required>
+        <button type="submit">Agregar</button>
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Edad</th>
+                <th>Ciudad</th>
+            </tr>
+        </thead>
+        <tbody id="cuerpo"></tbody>
+    </table>
+
+    <!-- Contenedor para mostrar los cálculos -->
+    <div id="estadisticas"></div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#formulario").submit(function (event) {
+                event.preventDefault(); // Evita el refresco de la página
+                
+                let edad = parseInt($("#edad").val());
+
+                // Validar que la edad sea un número válido
+                if (isNaN(edad)) {
+                    alert("Por favor, introduce una edad válida.");
+                    return;
+                }
+
+                let persona = {
+                    nombre: $("#nombre").val(),
+                    apellido: $("#apellido").val(),
+                    edad: edad,
+                    ciudad: $("#ciudad").val()
+                };
+
+                function generaTr(persona) {
+                    return `<tr>
+                        <td>${persona.nombre}</td>
+                        <td>${persona.apellido}</td>
+                        <td class="edad">${persona.edad}</td>
+                        <td>${persona.ciudad}</td>
+                    </tr>`;
+                }
+
+                // Agregar fila a la tabla
+                $("#cuerpo").append(generaTr(persona));
+
+                // Actualizar estadísticas
+                actualizarEstadisticas();
+
+                // Limpiar el formulario
+                $("#formulario")[0].reset();
+            });
+
+            // Eliminar fila al hacer clic en ella
+            $(document).on("click", "#cuerpo tr", function () {
+                $(this).remove();
+                actualizarEstadisticas();
+            });
+
+            // Función para actualizar estadísticas
+            function actualizarEstadisticas() {
+                let edades = $(".edad").map(function() {
+                    return parseInt($(this).text());
+                }).get();
+
+                if (edades.length === 0) {
+                    $("#estadisticas").html("No hay edades registradas.");
+                    return;
+                }
+
+                let suma = edades.reduce((a, b) => a + b, 0);
+                let resta = edades.reduce((a, b) => a - b);
+                let multiplicacion = edades.reduce((a, b) => a * b, 1);
+                let division = edades.reduce((a, b) => a / b);
+
+                $("#estadisticas").html(`
+                    <p>Suma: ${suma}</p>
+                    <p>Resta: ${resta}</p>
+                    <p>Multiplicación: ${multiplicacion}</p>
+                    <p>División: ${division.toFixed(2)}</p>
+                `);
+            }
+        });
+    </script>
+</body>
+</html>

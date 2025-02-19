@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IP</title>
+    <!-- Inclusión de Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container">
+    <h1 class="my-4">Conoce la Ubicación de tu IP</h1>
+    <!-- Formulario para ingresar la IP y enviar la solicitud -->
+    <form onsubmit="event.preventDefault(); solicitudAjax();" class="mb-4">
+        <div class="form-group">
+            <label for="IP">Dirección IP:</label>
+            <input type="text" id="IP" name="IP" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Recibir Datos</button>
+    </form>
+
+    <!-- Div para mostrar la tabla con los datos -->
+    <div id="data-table"></div>
+
+    <!-- Inclusión de Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Función para realizar la solicitud AJAX
+        function solicitudAjax() { 
+            var IP = document.getElementById("IP").value; // Obtener el valor de la IP ingresada
+            $.ajax({ 
+                // Configuración de la solicitud AJAX
+                url: "https://ipwho.is/" + encodeURIComponent(IP), 
+                method: "GET", 
+                dataType: "json",
+                // Función a ejecutar si la solicitud es exitosa
+                success: function(data) { 
+                    console.log(data); 
+                    mostrarDatosEnTabla(data); // Mostrar los datos en una tabla
+                }, 
+                // Función a ejecutar si hay un error en la solicitud
+                error: function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                } 
+            });
+        }
+
+        // Función para mostrar los datos en una tabla
+        function mostrarDatosEnTabla(data) {
+            var table = '<table class="table table-bordered">';
+            table += '<tr><th>Campo</th><th>Valor</th></tr>';
+
+            // Iterar sobre los datos y añadir filas a la tabla
+            for (var clave in data) {
+                    table += `<tr><td>${clave}</td><td>${procesarValor(data[clave])}</td></tr>`;
+            }
+
+            // Añadir enlace de Google Maps si latitud y longitud están disponibles
+            if (data.latitude && data.longitude) {
+                var googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
+                table += `<tr><td>Google Maps</td><td><a href="${googleMapsLink}" target="_blank">Ver ubicación</a></td></tr>`;
+            }
+
+            table += '</table>';
+            document.getElementById('data-table').innerHTML = table;
+        }
+
+        // Función para procesar los valores de los datos
+        function procesarValor(valor) {
+            if (typeof valor === 'object' && valor !== null) {
+                var subtabla = '<table class="table table-sm">';
+                // Iterar sobre las propiedades del objeto anidado
+                for (var subclave in valor) {
+                        subtabla += `<tr><td>${subclave}</td><td>${valor[subclave]}</td></tr>`;
+                }
+                subtabla += '</table>';
+                return subtabla;
+            }
+            return valor;
+        }
+    </script>
+</body>
+</html>

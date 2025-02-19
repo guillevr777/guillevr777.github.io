@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envío y Recepción de Datos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Enviar y Recibir Datos</h2>
+    
+    <form id="dataForm">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="email" id="email" placeholder="Correo Electrónico" required>
+        <button type="submit">Enviar</button>
+    </form>
+    
+    <h3>Datos Recibidos:</h3>
+    <div id="resultado"></div>
+
+    <script>
+        // Enviar datos usando Fetch API (alternativa moderna a AJAX)
+        document.getElementById("dataForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evita el envío tradicional del formulario
+            
+            let nombre = document.getElementById("nombre").value;
+            let email = document.getElementById("email").value;
+            
+            fetch("https://jsonplaceholder.typicode.com/posts", {
+                method: "POST",
+                body: JSON.stringify({ nombre: nombre, email: email }),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("resultado").innerHTML = `<p>Datos enviados con éxito: ${JSON.stringify(data)}</p>`;
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        // Recibir datos usando jQuery AJAX
+        function cargarDatos() {
+            $.ajax({
+                url: "https://jsonplaceholder.typicode.com/users",
+                method: "GET",
+                success: function(data) {
+                    let output = "<ul>";
+                    data.slice(0, 5).forEach(user => { 
+                        output += `<li>${user.name} - ${user.email}</li>`; 
+                    });
+                    output += "</ul>";
+                    $("#resultado").html(output);
+                },
+                error: function() {
+                    $("#resultado").html("<p>Error al cargar los datos.</p>");
+                }
+            });
+        }
+        
+        // Cargar datos cuando la página se carga
+        $(document).ready(function() {
+            cargarDatos();
+        });
+    </script>
+</body>
+</html>
