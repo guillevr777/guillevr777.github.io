@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palabras y Vocales</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #stats { border: 1px solid black; padding: 10px; width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>Palabras y Vocales</h1>
+    <h2>Introduce tu nombre aquí</h2>
+    
+    <button onclick="obtenerPalabras()">Nueva palabra</button>
+    <input type="number" id="cantidad" placeholder="Cantidad" min="1">
+    
+    <h3>Palabras obtenidas:</h3>
+    <ul id="lista-palabras"></ul>
+    
+    <div id="stats">
+        <h3>Estadísticas</h3>
+        <div id="estadisticas"></div>
+    </div>
+    <script>
+        let palabras = [];
+        let contadorVocales = { A: 0, E: 0, I: 0, O: 0, U: 0 };
+        let palabraLarga = "";
+        let palabraCorta = "";
+
+        function obtenerPalabras() { 
+            var cantidad = document.getElementById("cantidad").value || 1;
+            $.ajax({ 
+                url: `https://random-word-api.herokuapp.com/word?number=${cantidad}`, 
+                method: "GET", 
+                dataType: "json",
+                success: function(data) {
+                    console.log(data); 
+                    palabras = data; // Agregar las palabras obtenidas al array
+                    actualizarLista();
+                    actualizarEstadisticas(data);
+                }, 
+                error: function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                } 
+            });
+        }
+
+        function actualizarLista() {
+            let lista = document.getElementById("lista-palabras");
+            lista.innerHTML = palabras.map(p => `<li>${p}</li>`).join(" ");
+        }
+
+        function actualizarEstadisticas(nuevasPalabras) {
+            // Reiniciar las variables antes de actualizar las estadísticas
+            contadorVocales = { A: 0, E: 0, I: 0, O: 0, U: 0 };
+            palabraLarga = "";
+            palabraCorta = "";
+
+            nuevasPalabras.forEach(palabra => {
+                let primeraLetra = palabra.charAt(0).toUpperCase();
+                if (["A", "E", "I", "O", "U"].includes(primeraLetra)) {
+                    contadorVocales[primeraLetra]++;
+                }
+
+                if (!palabraLarga || palabra.length > palabraLarga.length) {
+                    palabraLarga = palabra;
+                }
+                if (!palabraCorta || palabra.length < palabraCorta.length) {
+                    palabraCorta = palabra;
+                }
+            });
+
+            document.getElementById("estadisticas").innerHTML = `
+                <p>A: ${contadorVocales.A}</p>
+                <p>E: ${contadorVocales.E}</p>
+                <p>I: ${contadorVocales.I}</p>
+                <p>O: ${contadorVocales.O}</p>
+                <p>U: ${contadorVocales.U}</p>
+                <p>Palabra más larga: ${palabraLarga}</p>
+                <p>Palabra más corta: ${palabraCorta}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

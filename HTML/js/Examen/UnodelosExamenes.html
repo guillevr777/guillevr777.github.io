@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dados de la Suerte</title>
+    <script>
+        function jugar() {
+            // Capturar los valores del formulario
+            let nombre = document.getElementById("nombre").value;
+            let apellidos = document.getElementById("apellidos").value;
+            let password = document.getElementById("password").value;
+            let apuesta = parseInt(document.getElementById("apuesta").value);
+            
+            // Validar datos
+            if (!nombre || !apellidos || !password || isNaN(apuesta) || apuesta < 2 || apuesta > 12) {
+                alert("Por favor, completa todos los campos correctamente.");
+                return;
+            }
+            
+            // Simular lanzamiento de dados
+            let dado1 = Math.floor(Math.random() * 6) + 1;
+            let dado2 = Math.floor(Math.random() * 6) + 1;
+            let resultado = dado1 + dado2;
+            
+            // Mostrar los resultados
+            document.getElementById("dado1").innerText = dado1;
+            document.getElementById("dado2").innerText = dado2;
+            document.getElementById("resultado").innerText = resultado;
+            
+            if (apuesta === resultado) {
+                document.getElementById("mensaje").innerText = "¡Felicidades! Has ganado.";
+            } else {
+                document.getElementById("mensaje").innerText = "Lo siento, has perdido.";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Dados de la Suerte</h1>
+    <h2>Introduce tus datos y haz tu apuesta</h2>
+    <form onsubmit="event.preventDefault(); jugar();">
+        Nombre: <input type="text" id="nombre" required><br>
+        Apellidos: <input type="text" id="apellidos" required><br>
+        Contraseña: <input type="password" id="password" required><br>
+        Apuesta (2-12): <input type="number" id="apuesta" min="2" max="12" required><br>
+        <button type="submit">Jugar</button>
+    </form>
+    
+    <h2>Resultados</h2>
+    <p>Dado 1: <span id="dado1">-</span></p>
+    <p>Dado 2: <span id="dado2">-</span></p>
+    <p>Resultado: <span id="resultado">-</span></p>
+    <h3 id="mensaje"></h3>
+</body>
+</html>

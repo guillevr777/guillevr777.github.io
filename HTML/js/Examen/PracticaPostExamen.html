@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica Post Examen</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Guillermo Villanueva Roldán</h1>
+    <p>Ejercicio de la Sociedad Secreta</p>
+    <form>
+        <input type="text" id="nombre" required><br>
+        <input type="text" id="apellidos" required><br>
+        <input type="password" id="password" required><br>
+        <input type="number" id="id"><br>
+        <button>Pincha aqui</button>
+    </form>
+    <script>
+    $(document).ready(function() {
+        $("button").click(function() {
+            let nombre = $("#nombre").val();
+            let apellidos = $("#apellidos").val();
+            let password = $("#password").val();
+            let id = $("#id").val();
+
+            if (!nombre || !apellidos || !password) {
+                alert("Por favor, completa todos los campos correctamente.");
+                return;
+            }
+
+            $.ajax({
+                url: "https://lm.iesnervion.es/secret.php",
+                method: "POST",
+                data: {
+                    nombre: nombre,
+                    apellidos: apellidos,
+                    password: password
+                },
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(xhr, status, error) {
+                    console.log(`Error: ${xhr.status} - ${error}`);
+                }
+            });
+        
+        if (id) {
+                $.ajax({
+                    url: "https://lm.iesnervion.es/secret.php",
+                    method: "GET",
+                    data: {
+                        id: id
+                    },
+                    success: function(data) {
+                        console.log(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(`Error: ${xhr.status} - ${error}`);
+                    }
+                });
+             }
+        });
+    });
+
+    $("form").submit(function(event) {
+        event.preventDefault();
+    });
+    </script>
+</body>
+</html>
