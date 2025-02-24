@@ -48,15 +48,42 @@ SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,E.HomePhone
 SELECT * FROM Employees
 SELECT * FROM Orders
 SELECT * FROM Customers
-SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,MONTH(E.BirthDate) + ' ' + DAY(E.BirthDate) AS Cumpleaños,C.Country FROM Employees AS E INNER JOIN Orders AS O ON E.EmployeeID = O.OrderID INNER JOIN Customers AS C ON O.CustomerID = C.CustomerID WHERE C.Country NOT IN ('Portugal') GROUP BY E.EmployeeID,E.FirstName,E.LastName,E.BirthDate,E.BirthDate,C.Country
+SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,MONTH(E.BirthDate) + ' ' + DAY(E.BirthDate) AS Cumpleaños,C.Country FROM Employees AS E INNER JOIN Orders AS O ON E.EmployeeID = O.OrderID INNER JOIN Customers AS C ON O.CustomerID = C.CustomerID WHERE C.Country NOT IN ('Portugal') GROUP BY E.EmployeeID,E.FirstName,E.LastName,E.BirthDate,C.Country
 
 --Total de ventas en US$ de productos de cada categoría (nombre de la categoría).
 
 SELECT * FROM Products
 SELECT * FROM Categories
-SELECT * FROM Suppliers
+SELECT * FROM [Order Details]
+SELECT C.CategoryName,SUM(OD.UnitPrice * OD.Quantity) AS VentasCategoria 
+FROM Categories AS C 
+INNER JOIN Products AS P ON C.CategoryID = P.CategoryID 
+INNER JOIN [Order Details] AS OD ON P.ProductID = OD.ProductID 
+GROUP BY C.CategoryName
 
 --Total de ventas en US$ de cada empleado cada año (nombre, apellidos, dirección).
+
+SELECT * FROM Employees
+SELECT * FROM Orders
+SELECT * FROM [Order Details]
+SELECT * FROM Products
+SELECT (E.LastName + ' ' + E.FirstName) AS NombreCompleto,YEAR(O.OrderDate) AS AñoVentas,P.ProductName AS NombreProducto,SUM(OD.Quantity * OD.UnitPrice) AS Dolares FROM Employees AS E INNER JOIN Orders AS O ON E.EmployeeID = O.EmployeeID INNER JOIN [Order Details] AS OD ON O.OrderID = OD.OrderID INNER JOIN Products AS P ON OD.ProductID = P.ProductID GROUP BY O.OrderDate,E.FirstName,E.LastName,P.ProductName ORDER BY NombreCompleto,O.OrderDate ASC
+
 --Ventas de cada producto en el año 97. Nombre del producto y unidades.
+
+SELECT * FROM Products
+SELECT * FROM [Order Details]
+SELECT * FROM Orders
+SELECT P.ProductName,P.UnitsInStock,YEAR(O.OrderDate) AS Año FROM Products AS P INNER JOIN [Order Details] AS OD ON P.ProductID = OD.ProductID INNER JOIN Orders AS O ON OD.OrderID = O.OrderID WHERE YEAR(O.OrderDate) = 1997 GROUP BY P.ProductName,P.UnitsInStock,O.OrderDate
+
 --Empleados (nombre y apellidos) que trabajan a las órdenes de Andrew Fuller.
+
+SELECT * FROM Employees
+SELECT (E.LastName + ' ' + E.FirstName) AS NombreCompleto FROM Employees AS E INNER JOIN Employees AS EM ON E.EmployeeID = E.ReportsTo WHERE E.FirstName IN ('Andrew') AND E.LastName IN ('Fuller')
+
 --Número de subordinados que tiene cada empleado, incluyendo los que no tienen ninguno. Nombre, apellidos, ID.
+
+SELECT * FROM Employees
+SELECT E.EmployeeID AS ID,COUNT(EM.EmployeeID) AS NºSubordinados,E.FirstName,E.LastName 
+FROM Employees AS E INNER JOIN Employees AS EM ON E.EmployeeID = EM.ReportsTo 
+GROUP BY E.EmployeeID,E.FirstName,E.LastName
