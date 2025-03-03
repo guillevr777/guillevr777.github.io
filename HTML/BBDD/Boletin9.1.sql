@@ -48,7 +48,11 @@ SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,E.HomePhone
 SELECT * FROM Employees
 SELECT * FROM Orders
 SELECT * FROM Customers
-SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,MONTH(E.BirthDate) + ' ' + DAY(E.BirthDate) AS Cumpleaños,C.Country FROM Employees AS E INNER JOIN Orders AS O ON E.EmployeeID = O.OrderID INNER JOIN Customers AS C ON O.CustomerID = C.CustomerID WHERE C.Country NOT IN ('Portugal') GROUP BY E.EmployeeID,E.FirstName,E.LastName,E.BirthDate,C.Country
+SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,MONTH(E.BirthDate) + ' ' + DAY(E.BirthDate) AS Cumpleaños FROM Employees AS E 
+EXCEPT SELECT E.EmployeeID,E.FirstName + ' ' + E.LastName AS NombreCompleto,MONTH(E.BirthDate) + ' ' + DAY(E.BirthDate) AS Cumpleaños FROM Employees AS E
+INNER JOIN Orders AS O ON E.EmployeeID = O.EmployeeID 
+INNER JOIN Customers AS C ON O.CustomerID = C.CustomerID 
+WHERE C.Country LIKE ('Portugal') 
 
 --Total de ventas en US$ de productos de cada categoría (nombre de la categoría).
 
@@ -79,7 +83,7 @@ SELECT P.ProductName,P.UnitsInStock,YEAR(O.OrderDate) AS Año FROM Products AS P 
 --Empleados (nombre y apellidos) que trabajan a las órdenes de Andrew Fuller.
 
 SELECT * FROM Employees
-SELECT (E.LastName + ' ' + E.FirstName) AS NombreCompleto FROM Employees AS E INNER JOIN Employees AS EM ON E.EmployeeID = E.ReportsTo WHERE E.FirstName IN ('Andrew') AND E.LastName IN ('Fuller')
+SELECT (E.LastName + ' ' + E.FirstName) AS NombreCompleto FROM Employees AS E INNER JOIN Employees AS EM ON EM.EmployeeID = E.ReportsTo WHERE EM.FirstName IN ('Andrew') AND EM.LastName IN ('Fuller')
 
 --Número de subordinados que tiene cada empleado, incluyendo los que no tienen ninguno. Nombre, apellidos, ID.
 
