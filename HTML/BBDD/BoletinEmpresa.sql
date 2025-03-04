@@ -74,13 +74,40 @@ SELECT E.nombre,P.numpedido FROM Empleados AS E INNER JOIN Pedidos AS P ON E.num
 --66. Hallar los empleados que realizaron su primer pedido el mismo día que fueron contratados.
 
 SELECT * FROM Empleados
-SELECT * FROM Pedidos
-SELECT * FROM 
+SELECT * FROM Pedidos ORDER BY RESP
+SELECT * FROM Pedidos ORDER BY numpedido
+SELECT GETDATE() CONTRATO FROM Empleados
+UPDATE PEDIDOS SET fechapedido = '14-01-2000' WHERE numpedido = 110035
+UPDATE PEDIDOS SET fechapedido = '13-01-2000' WHERE numpedido = 113034
+
+SELECT E.nombre,E.contrato,P.numpedido,P.fechapedido 
+FROM Empleados AS E INNER JOIN Pedidos AS P 
+ON E.numemp = P.resp 
+GROUP BY E.nombre,E.contrato,P.numpedido,P.fechapedido
+HAVING E.contrato = MIN(P.fechapedido)
 
 --67. Listar los empleados con una cuota superior a la de su jefe; para cada empleado sacar sus datos y el número, nombre y cuota de su jefe.
 
+SELECT * FROM Empleados
+SELECT E.nombre,E.cuota,J.nombre FROM Empleados AS E INNER JOIN Empleados AS J ON E.jefe = J.jefe
+
 --68. Listar los números de los empleados que son responsables de un pedido superior a 1.000 euros o que tengan una cuota inferior a 5.000 euros.
+
+SELECT * FROM Pedidos
+SELECT E.numemp,P.importe,E.cuota FROM Empleados AS E INNER JOIN PEDIDOS AS P ON E.numemp = P.resp WHERE P.importe > 1000 AND E.cuota < 5000
 
 --69. Mostrar las oficinas que no tienen director o que se encuentran en la región sur.
 
+SELECT * FROM OFICINAS
+SELECT * FROM Empleados
+SELECT O.Oficina,O.region,E.nombre FROM OFICINAS AS O INNER JOIN Empleados AS E ON O.dir = E.numemp WHERE O.dir = NULL OR O.region = 'sur'
+
 --70. Listar las oficinas que no tienen director o en las que trabaja alguien.
+
+SELECT * FROM OFICINAS
+SELECT * FROM Empleados
+SELECT O.Oficina,O.region,E.nombre 
+FROM OFICINAS AS O INNER JOIN Empleados AS E ON O.dir = E.numemp 
+WHERE O.dir = NULL OR E.oficina = O.oficina
+
+--
