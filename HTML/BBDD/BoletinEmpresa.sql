@@ -110,4 +110,57 @@ SELECT O.Oficina,O.region,E.nombre
 FROM OFICINAS AS O INNER JOIN Empleados AS E ON O.dir = E.numemp 
 WHERE O.dir = NULL OR E.oficina = O.oficina
 
---
+--71. ¿Cuál es la cuota media y las ventas medias de todos los empleados?
+
+SELECT * FROM Empleados
+SELECT SUM(cuota)/COUNT(cuota) as CuotaMedia,SUM(ventas)/COUNT(cuota) as VentaMedia FROM Empleados 
+
+--72. Edad media de los empleados.
+
+SELECT SUM(EDAD)/COUNT(EDAD) FROM Empleados
+
+--73. Edad del empleado más joven y del mayor.
+
+SELECT MAX(EDAD) AS MAYOR,MIN(EDAD) AS MENOR FROM Empleados
+
+--74. Hallar el importe medio de pedidos, el importe total de pedidos y el precio medio de venta (el precio de venta es el precio unitario en cada pedido).
+
+SELECT * FROM Empleados
+SELECT * FROM Pedidos
+SELECT SUM(importe)/COUNT(importe) AS impMedio,SUM(importe) AS impTotal FROM Pedidos
+
+--75. Hallar el precio medio de los productos del fabricante ‘ACI’.
+
+SELECT * FROM Productos
+SELECT SUM(precio*existencias) AS PrecioMedio FROM Productos WHERE idfab = 'ACI';
+
+--76. ¿Cuál es el importe total de los pedidos realizados por el empleado Vicente Vino?
+
+SELECT SUM(P.importe) AS ImporteTotal FROM Empleados AS E INNER JOIN Pedidos AS P ON E.numemp = P.resp WHERE nombre = 'Vicente Vino';
+
+--77. Hallar en qué fecha se realizó el primer pedido.
+
+SELECT * FROM Pedidos
+SELECT fechapedido FROM Pedidos 
+--78. Hallar cuántos pedidos hay de más de 5.000 euros.
+--79. Listar cuántos empleados están asignados a cada oficina, indicar el número de oficina.
+--80. Mostrar el número de oficinas que existen en cada región.
+--81. Saber cuántas oficinas tienen algún empleado con ventas superiores a su cuota, no queremos saber cuales sino cuántas hay.
+--82. Para cada empleado, obtener su número, nombre, e importe vendido a cada cliente indicando el número de cliente.
+--83. Para cada empleado cuyos pedidos suman más de 3.000 euros, hallar su importe medio de pedidos. En el resultado indicar el número de empleado y su importe medio de pedidos.
+--84. Listar de cada producto, su descripción, precio y cantidad total pedida, incluyendo sólo los productos cuya cantidad total pedida sea superior al 75% del stock; y ordenado por cantidad total pedida.
+--85. Escribir una consulta SQL que indique el número de empleados que trabaja en cada oficina.
+--86. Igual que el ejercicio anterior pero mostrando las oficinas donde trabajan 3 o más empleados. Subconsultas
+--87. Listar los nombres de los clientes que tienen asignado como responsable a Alvaro Aluminio (su- poniendo que no pueden haber empleados con el mismo nombre).
+--88. Mostrar información de los productos cuyas existencias estén por debajo de la existencia media de los productos.
+--89. Listar los empleados (numemp, nombre, y no de oficina) que trabajan en oficinas “buenas” (las que tienen ventas superiores a su objetivo).
+--90. Listar los empleados que trabajan en una oficina de la región norte o de la región sur.
+--91. Listar los empleados (numemp, nombre y oficina) que no trabajan en oficinas dirigidas por el empleado 108.
+--92. Escribir una consulta que muestre los empleados cuyo nombre coincide con el de algún cliente. Hacer dos versiones: con subconsulta de tipo lista y de tipo tabla.
+--93. Escribir una consulta que muestre los empleados cuyo primer nombre coincide con el primer nombre de algún cliente.
+--94. Mostrar los empleados que no son directores de ninguna oficina.
+--95. Listar los productos (idfab, idproducto y descripción) para los cuales no existe ningún pedido con importe igual o superior a 2.500 euros.
+--96. Listar los clientes asignados a Ana Bustamante que no han hecho un pedido superior a 300 euros.
+--97. Listar las oficinas en donde al menos haya un empleado cuyas ventas representen más del 55% del objetivo de su oficina.
+--98. Listar las oficinas donde todos los empleados tienen ventas que superan al 50% del objetivo de la oficina.
+--99. Listar las oficinas que tengan un objetivo mayor que la suma de las cuotas de sus empleados.
