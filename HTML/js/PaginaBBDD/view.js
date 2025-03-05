@@ -1,49 +1,67 @@
 class TaskView {
   constructor() {
-      this.taskInput = document.getElementById('taskInput');
+      // Capturar elementos del DOM
+      this.nameInput = document.getElementById('Nombre');
+      this.lastNameInput = document.getElementById('Apellido');
+      this.ageInput = document.getElementById('Edad');
+      this.cityInput = document.getElementById('Ciudad');
       this.addTaskButton = document.getElementById('addTaskButton');
-      this.taskList = document.getElementById('Nombre');
+      this.taskList = document.getElementById('taskList');
   }
 
-  // Mostrar la lista de tareas
-  renderTasks(tasks) {
-      this.taskList.innerHTML = '';
-      const table = document.createElement('table');
-      tasks.forEach((task, index) => {
-          const row = document.createElement('tr');
-          const cell = document.createElement('td');
-          cell.textContent = task;
-          const deleteButton = document.createElement('button');
-          deleteButton.textContent = 'Eliminar';
-          deleteButton.addEventListener('click', () => {
-              this.onDeleteTask(index);
-          });
-          const deleteCell = document.createElement('td');
-          deleteCell.appendChild(deleteButton);
-          row.appendChild(cell);
-          row.appendChild(deleteCell);
-          table.appendChild(row);
-      });
-      this.taskList.appendChild(table);
-  }
-
-  // Obtener la tarea del input
+  // Obtener los valores del formulario como un objeto
   getTaskInput() {
-    return this.taskInput.value;
+      return {
+          nombre: this.nameInput.value,
+          apellido: this.lastNameInput.value,
+          edad: this.ageInput.value,
+          ciudad: this.cityInput.value
+      };
   }
 
-  // Limpiar el input
+  // Limpiar los campos del formulario después de añadir una entrada
   clearTaskInput() {
-    this.taskInput.value = '';
+      this.nameInput.value = '';
+      this.lastNameInput.value = '';
+      this.ageInput.value = '';
+      this.cityInput.value = '';
   }
 
-  // Método para manejar el evento de eliminar tarea
+  // Renderizar la tabla con los datos almacenados
+  renderTasks(tasks) {
+      this.taskList.innerHTML = ''; // Limpiar la tabla antes de renderizar
+
+      tasks.forEach((task, index) => {
+        let row = document.createElement("tr"); // Crear un nuevo elemento <tr>
+        row.id = `id${index}`; // Asignar el ID dinámicamente
+        row.setAttribute("onclick", `deleteRow(${index})`); // Pasar el índice correctamente
+    
+        row.innerHTML = `
+            <td>${task.nombre}</td>
+            <td>${task.apellido}</td>
+            <td>${task.edad}</td>
+            <td>${task.ciudad}</td>
+        `;
+    
+        this.taskList.appendChild(row); // Agregar la fila a la tabla sin sobrescribir el contenido
+    });
+
+      // Vincular botones de eliminar
+      document.querySelectorAll('.delete-btn').forEach(button => {
+          button.addEventListener('click', (event) => {
+              const index = event.target.getAttribute('data-index');
+              this.onDeleteTask(parseInt(index));
+          });
+      });
+  }
+
+  // Método para enlazar la eliminación
   bindDeleteTask(handler) {
-    this.onDeleteTask = handler;
+      this.onDeleteTask = handler;
   }
 
-  // Método para manejar el evento de añadir tarea
+  // Método para enlazar la adición de datos
   bindAddTask(handler) {
-    this.addTaskButton.addEventListener('click', handler);
+      this.addTaskButton.addEventListener('click', handler);
   }
 }

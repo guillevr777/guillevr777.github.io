@@ -3,33 +3,37 @@ class TaskController {
         this.model = model;
         this.view = view;
 
-        // Vincular eventos
+        // Enlazar eventos de la vista
         this.view.bindAddTask(this.handleAddTask.bind(this));
         this.view.bindDeleteTask(this.handleDeleteTask.bind(this));
 
-        // Mostrar tareas iniciales
+        // Cargar la vista inicial
         this.updateView();
     }
 
-    // Manejar la adición de una tarea
+    // Manejar la adición de una nueva entrada
     handleAddTask() {
         const task = this.view.getTaskInput();
-        if (task) {
+        
+        // Validar que los campos no estén vacíos
+        if (task.nombre && task.apellido && task.edad && task.ciudad) {
             this.model.addTask(task);
             this.view.clearTaskInput();
             this.updateView();
+        } else {
+            alert('Por favor, complete todos los campos.');
         }
     }
- // Manejar la eliminación de una tarea
- handleDeleteTask(index) {
-    this.model.deleteTask(index);
-    this.updateView();
-}
 
-// Actualizar la vista con las tareas actuales
-updateView() {
-    const tasks = this.model.getTasks();
-    this.view.renderTasks(tasks);
+    // Manejar la eliminación de una entrada
+    handleDeleteTask(index) {
+        this.model.deleteTask(index);
+        this.updateView();
+    }
+
+    // Actualizar la vista con los datos actuales
+    updateView() {
+        const tasks = this.model.getTasks();
+        this.view.renderTasks(tasks);
     }
 }
-

@@ -1,20 +1,20 @@
 class TaskModel {
-  constructor() {
-      this.tasks = [];
-  }
+    constructor() {
+        this.tasks = [];
+    }
 
-  // Añadir una tarea
-  addTask(task) {
-      this.tasks.push(task);
-  }
+    // Añadir una nueva entrada con Nombre, Apellido, Edad y Ciudad
+    addTask(task) {
+        this.tasks.push(task);
+    }
 
-  // Obtener todas las tareas
-  getTasks() {
-      return this.tasks;
-  }
+    // Obtener todas las entradas
+    getTasks() {
+        return this.tasks;
+    }
 
-  // Eliminar una tarea por su índice
-  deleteTask(index) {
-      this.tasks.splice(index, 1);
-  }
+    // Eliminar una entrada por índice
+    deleteTask(index) {
+        this.tasks.splice(index, 1);
+    }
 }
