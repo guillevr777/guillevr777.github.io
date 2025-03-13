@@ -29,12 +29,28 @@ class TareasModel {
     }
 
     removeTarea(id) {
+        let encontrado = false;
+        let resultado = [];
+        encontrado = this.buscaId(id)
+        if (encontrado >= 0)
+            resultado = this.lista.splice(encontrado, 1);
+        return resultado
     }
 
     removeAll() {
+        this.lista.splice(0, this.lista.length);
     }
 
     updateTarea(id, descripcion, estado) {
+        let encontrado = false;
+        let resultado = [];
+        encontrado = this.buscaId(id)
+        if (encontrado >= 0) {
+            this.lista[encontrado].descripcion = descripcion;
+            this.lista[encontrado].estado = estado;
+            resultado = this.lista[encontrado];
+        }
+        return resultado
     }
 
     buscaId(id) {
