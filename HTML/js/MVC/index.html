@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas - MVC</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Lista de Tareas</h1>
+        <form id="formulario-tarea">
+            <input type="text" id="campo-tarea" placeholder="Nueva tarea" required>
+            <button type="submit" id="boton-agregar">Agregar</button>
+        </form>
+        <table id="tabla-tareas">
+            <thead>
+                <tr>
+                    <th>Tarea</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Las tareas se insertarán aquí dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="tareaControlador.js"></script>
+    <script src="tareaVista.js"></script>
+    <script src="tareaModelo.js"></script>
+    <script>
+        // Inicialización de la aplicación
+        const controller = new TareaController();
+    </script>
+</body>
+</html>
