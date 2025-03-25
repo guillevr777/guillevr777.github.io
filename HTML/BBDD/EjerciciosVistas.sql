@@ -84,5 +84,22 @@ SELECT * FROM Asistencias
 *Se contarán únicamente las regatas que se hayan disputado en un campo de regatas situado en longitud Oeste (W). Se sabe que la longitud es W porque el número es negativo.
 */
 
+SELECT * FROM LS_Cursos
+SELECT * FROM LS_Miembros_Cursos
+SELECT * FROM LS_Miembros
+SELECT * FROM LS_Miembros_Barcos_Regatas
+SELECT * FROM LS_Regatas
+SELECT * FROM LS_ResultadosRegatas
+SELECT * FROM LS_Barcos
+SELECT * FROM LS_Clases
+
+SELECT * FROM LS_Cursos
+SELECT * FROM LS_Clases
+SELECT * FROM LS_ResultadosRegatas
+SELECT * FROM LS_Miembros
+
 CREATE VIEW HorasMiembros AS
-SELECT M.nombre + ' ' + M.apellidos AS NombreCompleto,SUM(C.duracion*24) AS HorasAcumuladas,CL.nombre AS NombreRegata,RR.FechaRegata FROM 
+SELECT M.nombre + ' ' + M.apellidos AS NombreCompleto,SUM(C.duracion*24) AS HorasAcumuladas,CL.nombre AS NombreRegata,RR.FechaRegata FROM LS_Cursos C 
+INNER JOIN LS_Miembros_Cursos MC ON C.codigo_curso = MC.codigo_curso 
+INNER JOIN LS_Miembros M ON MC.licencia_federativa = M.licencia_federativa 
+INNER JOIN LS_Miembros_Barcos_Regatas MBR ON 
