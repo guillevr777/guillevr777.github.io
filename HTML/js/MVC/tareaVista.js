@@ -21,6 +21,15 @@ class TareaView {
         tareas.forEach(tarea => {
             const fila = document.createElement('tr');
 
+            // Columna para el checkbox
+            const columnaCheckbox = document.createElement('td');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = tarea.completada;
+            checkbox.addEventListener('change', () => controller.toggleCompletada(tarea.id));
+            columnaCheckbox.appendChild(checkbox);
+            fila.appendChild(columnaCheckbox);
+
             // Columna para el texto de la tarea
             const columnaTexto = document.createElement('td');
             columnaTexto.textContent = tarea.texto;

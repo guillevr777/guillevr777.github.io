@@ -24,6 +24,12 @@ class TareaController {
         this.actualizarVista();
     }
 
+    // Método para marcar una tarea como completada o no completada
+    toggleCompletada(id) {
+        this.modelo.toggleCompletada(id);
+        this.actualizarVista();
+    }
+
     // Método para actualizar la vista
     actualizarVista() {
         const tareas = this.modelo.obtenerTareas();
