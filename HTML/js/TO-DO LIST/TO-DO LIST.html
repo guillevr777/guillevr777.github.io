@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TO-DO LIST</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>TO-DO LIST</h1>
+    <form id="formTarea">
+        <input type="text" name="nombre" class="task_input" placeholder="Nombre de la tarea" required>
+        <input type="text" name="descripcion" class="task_input" placeholder="Descripción de la tarea" required>
+        <button type="submit" name="submit">Añadir Tarea</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody id="listaTareas">
+            <!-- Las tareas se renderizarán aquí dinámicamente -->
+        </tbody>
+    </table>
+    <script src="Modelo.js"></script>
+    <script src="Controlador.js"></script>
+    <script src="Vista.js"></script>
+    <script>
+        // Inicialización del MVC
+        const modelo = new Modelo();
+        const vista = new Vista();
+        const controlador = new Controlador(modelo, vista);
+    
+        // Manejo del formulario
+        document.getElementById('formTarea').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado del formulario
+            const nombre = event.target.nombre.value;
+            const descripcion = event.target.descripcion.value;
+            controlador.crear({ nombre, descripcion });
+            event.target.reset(); // Limpiar el formulario
+        });
+    
+        // Renderizar la lista inicial de tareas
+        controlador.listar();
+    </script>
+</body>
+</html>
