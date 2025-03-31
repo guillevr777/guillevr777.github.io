@@ -92,10 +92,18 @@ EXEC ESTA 'SERRA';
 
 CREATE OR ALTER PROCEDURE Borrar @Num INT, @Apellido VARCHAR(12), @Oficio VARCHAR(12), @Dir INT, @Fecha DATE, @Salario MONEY, @Comision DECIMAL, @NumDepartamento INT AS
 BEGIN
-DELETE FROM Emp WHERE Emp_No = @Num AND Apellido = @Apellido AND Oficio = @Oficio AND Dir = @Dir AND Fecha_Alt = @Fecha AND Salario = @Salario AND Comision = @Comision AND Dept_No = @NumDepartamento;
+ IF EXISTS (SELECT 1 FROM Emp  WHERE Emp_No = @Num AND Apellido = @Apellido  AND Oficio = @Oficio  AND Dir = @Dir 
+        AND Fecha_Alt = @Fecha AND Salario = @Salario  AND Comision = @Comision  AND Dept_No = @NumDepartamento)
+    BEGIN
+        DELETE FROM Emp WHERE Emp_No = @Num AND Apellido = @Apellido AND Oficio = @Oficio AND Dir = @Dir 
+        AND Fecha_Alt = @Fecha AND Salario = @Salario AND Comision = @Comision AND Dept_No = @NumDepartamento;
+        PRINT 'Empleado eliminado correctamente.'
+    END
+    ELSE
+    BEGIN
+        PRINT 'No se encontro ningun empleado con esos datos.'
+    END
 END
-
-EXEC Borrar SELECT TOP 1 FROM Emp;
 
 SELECT * FROM Emp
 
@@ -137,5 +145,88 @@ EXEC BorrarYa 7119,'SERRA','MACETA',7782,'1983-11-19 00:00:00',225000.00,39000.0
 --Para insertar la función de la plantilla deberá estar entre los que hay en la base de datos, al igual que el Turno.
 --El salario no superará las 500.000 euros.
 
+CREATE PROCEDURE InsertarEmpleadoPlantilla @Empleado_No INT, @NombreHospital NVARCHAR(255), @NombreSala NVARCHAR(255), @Apellido NVARCHAR(255), @Funcion NVARCHAR(255), @Turno NVARCHAR(50), @Salario DECIMAL(10,2) AS
+BEGIN
+    DECLARE @Hospital_Cod INT, @Sala_Cod INT;
+    SELECT @Hospital_Cod = h.Hospital_Cod, @Sala_Cod = s.Sala_Cod
+    FROM Hospital h
+    JOIN Sala s ON h.Hospital_Cod = s.Hospital_Cod AND s.Nombre = @NombreSala
+    WHERE h.Nombre = @NombreHospital;
+    IF @Hospital_Cod IS NULL OR @Sala_Cod IS NULL
+    BEGIN
+        PRINT 'Error: Hospital o sala no existen.';
+        RETURN;
+    END
+    IF NOT EXISTS (SELECT 1 FROM Plantilla WHERE Empleado_No = @Empleado_No) AND
+       EXISTS (SELECT 1 FROM Plantilla WHERE Funcion = @Funcion) AND
+       EXISTS (SELECT 1 FROM Plantilla WHERE T = @Turno) AND
+       @Salario <= 500000
+    BEGIN
+        INSERT INTO Plantilla (Empleado_No, Sala_Cod, Hospital_Cod, Apellido, Funcion, T, Salario)
+        VALUES (@Empleado_No, @Sala_Cod, @Hospital_Cod, @Apellido, @Funcion, @Turno, @Salario);
+        PRINT 'Empleado insertado correctamente.';
+    END
+    ELSE
+        PRINT 'Error: Empleado duplicado, función/turno inválidos o salario excede el límite.';
+END
+
+EXEC InsertarEmpleadoPlantilla 9000, 'San Carlos', 'Cardiología', 'Fernández P.', 'Enfermero', 'T', 180000;
+
 SELECT * FROM Plantilla
-CREATE PROCEDURE InsertarHospital @Empleado_No INT, @Sala_Cod INT, @Hospital_Cod INT, @Apellido VARCHAR, @Funcion VARCHAR, @T VARCHAR, @Salario MONEY, @Code INT AS
+SELECT * FROM Hospital
+SELECT * FROM Sala
+
+--9) Crear un procedimiento para devolver dos informes sobre los empleados de la plantilla de un determinado hospital, sala, turno (campo T de Plantilla) o función. El informe mostrará primero, número de empleados, media del salario, suma del salario y la función, turno, sala u hospital, y segundo, un informe personalizado de cada uno, que muestre código de empleado, apellido y salario. Recibiremos un solo parámetro, que será el nombre del hospital, el nombre de la sala, el turno de la plantilla o la función de la plantilla.
+
+CREATE PROCEDURE GenerarInformeEmpleados @Filtro NVARCHAR(255) AS
+BEGIN
+    SELECT COUNT(*) AS Numero_Empleados, AVG(Salario) AS Media_Salario, SUM(Salario) AS Suma_Salario, Funcion, T AS Turno, s.Nombre AS Sala, h.Nombre AS Hospital
+    FROM Plantilla p JOIN Sala s ON p.Sala_Cod = s.Sala_Cod JOIN Hospital h ON p.Hospital_Cod = h.Hospital_Cod
+    WHERE h.Nombre = @Filtro OR s.Nombre = @Filtro OR p.T = @Filtro OR p.Funcion = @Filtro
+    GROUP BY Funcion, T, s.Nombre, h.Nombre;
+    PRINT 'Informe Resumen generado.';
+    SELECT Empleado_No, Apellido, Salario
+    FROM Plantilla p JOIN Sala s ON p.Sala_Cod = s.Sala_Cod JOIN Hospital h ON p.Hospital_Cod = h.Hospital_Cod
+    WHERE h.Nombre = @Filtro OR s.Nombre = @Filtro OR p.T = @Filtro OR p.Funcion = @Filtro;
+    PRINT 'Informe Detallado generado.';
+END
+
+EXEC GenerarInformeEmpleados 'San Carlos';
+EXEC GenerarInformeEmpleados 'Cardiología';
+
+--10) Crear un procedimiento en el que pasaremos como parámetro el Apellido de un empleado. 
+--El procedimiento devolverá los subordinados del empleado escrito, si el empleado no existe en la base de datos,
+--informaremos de ello, si el empleado no tiene subordinados, lo informa remos con un mensaje y mostraremos su jefe.
+--Mostrar el número de empleado, Apellido, Oficio y Departamento de los subordinados.
+
+
+CREATE PROCEDURE ObtenerSubordinados @Apellido NVARCHAR(255) AS
+BEGIN
+    DECLARE @Empleado_No INT, @Jefe_No INT;
+    SELECT @Empleado_No = Empleado_No
+    FROM Plantilla
+    WHERE Apellido = @Apellido;
+    IF @Empleado_No IS NULL
+    BEGIN
+        PRINT 'Error: El empleado no existe en la base de datos.';
+    END
+    IF EXISTS (SELECT 1 FROM Plantilla WHERE Empleado_No = @Empleado_No)
+    BEGIN
+        PRINT 'Subordinados del empleado:';
+        
+    END
+    ELSE
+    BEGIN
+        PRINT 'El empleado no tiene subordinados.';
+        IF @Jefe_No IS NOT NULL
+        BEGIN
+            SELECT Empleado_No, Apellido, Funcion, Sala_Cod
+            FROM Plantilla
+            WHERE Empleado_No = @Jefe_No;
+        END
+        ELSE
+            PRINT 'Este empleado no tiene jefe.';
+    END
+END
+
+--NO SE COMO SACAR AL JEFE LA VERDAD...
