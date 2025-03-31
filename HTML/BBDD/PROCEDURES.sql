@@ -105,13 +105,37 @@ SELECT * FROM Emp
 
 CREATE OR ALTER PROCEDURE BorrarYa @Num INT, @Apellido VARCHAR(12), @Oficio VARCHAR(12), @Dir INT, @Fecha DATE, @Salario MONEY, @Comision DECIMAL, @NumDepartamento INT AS
 BEGIN
-IF @Num IN (SELECT Dept_No FROM Emp)
-	DELETE FROM Emp WHERE Emp_No = @Num AND Apellido = @Apellido AND Oficio = @Oficio AND Dir = @Dir AND Fecha_Alt = @Fecha AND Salario = @Salario AND Comision = @Comision AND Dept_No = @NumDepartamento;
-	PRINT('El usuario fue eliminado con exito.');
-ELSE IF @Num IN (SELECT Dept_No FROM Emp) AND SELECT * FROM Emp WHERE Emp_No != @Num OR Apellido != @Apellido OR Oficio != @Oficio OR Dir != @Dir OR Fecha_Alt != @Fecha OR Salario != @Salario OR Comision != @Comision OR Dept_No != @NumDepartamento;
-	PRINT('El usuario no coincide con los datos inyectados.');
-ELSE
-	PRINT('El usuario no coincide.');
+IF EXISTS (SELECT * FROM Emp WHERE Emp_No = @Num AND Apellido = @Apellido AND Oficio = @Oficio AND Dir = @Dir AND Fecha_Alt = @Fecha AND Salario = @Salario AND Comision = @Comision AND Dept_No = @NumDepartamento)
+	BEGIN
+	DELETE FROM Emp WHERE Emp_No = @Num
+	PRINT ('Se elimino con exito de la BBDD.')
+	END
+ELSE IF EXISTS (SELECT * FROM Emp WHERE Emp_No = @Num)
+	BEGIN
+	DECLARE @NS VARCHAR(100)
+	SET @NS = (SELECT * FROM Emp WHERE Emp_No = @Num)
+	PRINT('El usuario no coincide , ' + @NS);
+	END
+ELSE 
+	BEGIN
+	PRINT('No se encontro la consulta en la BBDD.')
+	END
 END
 
-EXEC BorrarYa SELECT TOP 1 FROM Emp;
+ROLLBACK
+BEGIN
+EXEC BorrarYa 7119,'SERRA','DIRECTOR',7782,'1983-11-19 00:00:00',225000.00,39000.00,20;
+END
+
+EXEC BorrarYa 7119,'SERRA','MACETA',7782,'1983-11-19 00:00:00',225000.00,39000.00,20;
+
+--13) Crear un procedimiento para insertar un empleado de la plantilla del Hospital.
+--Para poder insertar el empleado realizaremos restricciones:
+--No podrá estar repetido el número de empleado.
+--Para insertar, lo haremos por el nombre del hospital y por el nombre de sala, si no existe
+--la sala o el hospital, no insertaremos y lo informaremos.
+--Para insertar la función de la plantilla deberá estar entre los que hay en la base de datos, al igual que el Turno.
+--El salario no superará las 500.000 euros.
+
+SELECT * FROM Plantilla
+CREATE PROCEDURE InsertarHospital @Empleado_No INT, @Sala_Cod INT, @Hospital_Cod INT, @Apellido VARCHAR, @Funcion VARCHAR, @T VARCHAR, @Salario MONEY, @Code INT AS
