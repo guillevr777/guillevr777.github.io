@@ -1,5 +1,4 @@
 class Vista {
-    // Elementos de la interfaz
     campoNombre   // Input para el nombre de la tarea
     campoDescripcion // Input para la descripción de la tarea
     botonGuardar  // Botón para guardar la tarea
@@ -32,4 +31,3 @@ class Vista {
         });
     }
 }
-
