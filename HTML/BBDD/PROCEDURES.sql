@@ -57,21 +57,21 @@ EXEC SalarioOficioComision 'SERRA';
 
 --6) Igual que el anterior, pero si no le pasamos ningún valor, mostrará los datos de todos los empleados.
 
-CREATE PROCEDURE SalarioOficioComision2 @Apellido VARCHAR(15) AS
+CREATE OR ALTER PROCEDURE SalarioOficioComision2 @Apellido VARCHAR(15) = null AS
 BEGIN
 IF @Apellido IS NULL
-	SELECT Salario,Oficio,Comision,Apellido FROM Emp;
+	SELECT Salario,Oficio,Comision,Apellido FROM Emp WHERE Apellido = @Apellido;
 ELSE 
 	SELECT Salario,Oficio,Comision,Apellido FROM Emp WHERE Apellido = @Apellido;
 END
 
-EXEC SalarioOficioComision2 'SERRA';
+EXEC SalarioOficioComision2 '';
 
 --7) Crear un procedimiento para mostrar el salario, oficio, apellido y nombre del departamento de todos los empleados que contengan en su apellido el valor que le pasemos como parámetro.
 
 CREATE OR ALTER PROCEDURE DATOS7 @Apellido VARCHAR(15) AS
 BEGIN
-SELECT E.Salario,E.Oficio,E.Apellido,D.DNombre FROM Emp E INNER JOIN Dept D ON E.Dept_No = D.Dept_No WHERE E.Apellido LIKE CONCAT('%',@Apellido,'%');
+SELECT E.Salario,E.Oficio,E.Apellido,D.DNombre FROM Emp E INNER JOIN Dept D ON E.Dept_No = D.Dept_No WHERE E.Apellido LIKE('%'+ @Apellido + '%');
 END
 
 EXEC DATOS7 'S';
