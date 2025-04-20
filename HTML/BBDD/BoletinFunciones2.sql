@@ -61,28 +61,47 @@ SELECT dbo.DescuentoMaximo('Beverages') AS Sucesion
 
 --4.Obtener los DÍAS LABORABLES ENTRE DOS FECHAS:
 
-CREATE OR ALTER FUNCTION dbo.EntreFechas()
-RETURNS Varchar(MAX)
+CREATE OR ALTER FUNCTION dbo.EntreFechas(@FechaInicio DATE, @FechaFin DATE)
+RETURNS INT
 AS
 BEGIN
-    DECLARE @Descuento DECIMAL(5, 2)
+    DECLARE @DiasLaborables INT = 0
 
-    SELECT @Descuento = MAX(O.Discount)
-    FROM [Order Details] O
-    INNER JOIN Products P ON O.ProductID = P.ProductID
-    INNER JOIN Categories C ON P.CategoryID = C.CategoryID
-    WHERE C.CategoryName = @Categoria
+    WHILE @FechaInicio <= @FechaFin
+	BEGIN
+	IF DATENAME(WEEKDAY, @FechaInicio) NOT IN ('Saturday','Sunday')
+		BEGIN
+            SET @DiasLaborables += 1;
+        END
+        SET @FechaInicio = DATEADD(DAY, 1, @FechaInicio);
+    END
 
-    RETURN @Descuento
+    RETURN @DiasLaborables
 END
 
-SELECT dbo.DescuentoMaximo('Beverages') AS Sucesion
+SELECT dbo.EntreFechas('2025-04-01', '2025-04-10') AS DiasLaborables;
 
 --5. OBTENER TOTAL DE PEDIDOS POR CLIENTE:
 
+CREATE OR ALTER FUNCTION dbo.TotalPedidos(@CustomerName VARCHAR(MAX))
+RETURNS INT
+AS
+BEGIN
+	DECLARE @Cantidad INT = 0
+	SET @Cantidad = (SELECT COUNT(O.OrderID) FROM Customers C INNER JOIN Orders O ON C.CustomerID = O.CustomerID WHERE C.ContactName = @CustomerName);
+
+	RETURN @Cantidad
+END
+
+SELECT dbo.TotalPedidos('Maria Anders') AS TotalPedidosCliente;
+
 --6 Función que calcule el promedio de una serie de valores. Los parámetros de la función se pasarán de forma ‘1,2,3,4….’:
 
+
+
 --7. OBTENER LOS DETALLES DE PEDIDOS DE  TODOS LOS CLIENTES. Obtener el identificador de la orden, el nombre del producto, la cantidad pedida y el nombre de la compañçia.:
+
+
 
 --8. OBTENER VENTAS MENSUALES POR CATEGORÍA. Mostrar por cada año y mes, el nombre de la categoría y la cantidad de ventas realizadas.:
 
