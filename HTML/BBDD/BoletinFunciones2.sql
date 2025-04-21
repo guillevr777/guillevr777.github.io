@@ -101,9 +101,38 @@ SELECT dbo.TotalPedidos('Maria Anders') AS TotalPedidosCliente;
 
 --7. OBTENER LOS DETALLES DE PEDIDOS DE  TODOS LOS CLIENTES. Obtener el identificador de la orden, el nombre del producto, la cantidad pedida y el nombre de la compañçia.:
 
+CREATE OR ALTER FUNCTION dbo.DetallesPedidos()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        O.OrderID AS PedidoID,
+        P.ProductName AS Producto,
+        O.Quantity AS Cantidad,
+        S.CompanyName AS Compañía
+    FROM [Order Details] O
+    INNER JOIN Products P ON O.ProductID = P.ProductID
+    INNER JOIN Suppliers S ON P.SupplierID = S.SupplierID
+)
 
+SELECT dbo.DetallesPedidos()
 
 --8. OBTENER VENTAS MENSUALES POR CATEGORÍA. Mostrar por cada año y mes, el nombre de la categoría y la cantidad de ventas realizadas.:
+
+CREATE OR ALTER FUNCTION dbo.Ventas(@Categoria VARCHAR(MAX))
+RETURNS VARCHAR(MAX)
+BEGIN
+	DECLARE @Resultado VARCHAR(MAX)
+
+	SELECT @Resultado = SELECT  FROM Orders O INNER JOIN [Order Details] OD ON O.OrderID = OD.OrderID INNER JOIN Products P ON OD.ProductID = P.ProductID INNER JOIN Categories C ON P.CategoryID = C.CategoryID WHERE C.CategoryName = @Categoria
+	
+	RETURN @Resultado
+END
+
+SELECT * FROM Categories
+
+EXEC dbo.Ventas('Confections')
 
 --9. OBTENER RESUMEN SEMANAL DE VENTAS. Queremos mostrar por cada semana, las ventas realizadas. Ejemplo: 1    500
         --2   200:

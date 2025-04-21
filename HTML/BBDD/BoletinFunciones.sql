@@ -38,8 +38,7 @@ END
 
 SELECT dbo.DiaANumero(3) AS Dia
 
---3. Crear una funcion a la que pasar dos números y realizar la 
---suma
+--3. Crear una funcion a la que pasar dos números y realizar la suma
 
 CREATE OR ALTER FUNCTION dbo.Suma (@Num1 INT, @Num2 INT)
 RETURNS INT
