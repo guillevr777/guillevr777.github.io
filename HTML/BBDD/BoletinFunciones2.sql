@@ -97,7 +97,21 @@ SELECT dbo.TotalPedidos('Maria Anders') AS TotalPedidosCliente;
 
 --6 Función que calcule el promedio de una serie de valores. Los parámetros de la función se pasarán de forma ‘1,2,3,4….’:
 
+CREATE OR ALTER FUNCTION dbo.CalcularPromedioDesdeCadena(
+    @Valores NVARCHAR(MAX)
+)
+RETURNS FLOAT
+AS
+BEGIN
+    DECLARE @Promedio FLOAT;
 
+    SELECT @Promedio = AVG(TRY_CAST(value AS FLOAT))
+    FROM STRING_SPLIT(@Valores, ',')
+
+    RETURN ISNULL(@Promedio, 0);
+END
+
+SELECT dbo.CalcularPromedioDesdeCadena('1,2,3,4,5') AS Promedio;
 
 --7. OBTENER LOS DETALLES DE PEDIDOS DE  TODOS LOS CLIENTES. Obtener el identificador de la orden, el nombre del producto, la cantidad pedida y el nombre de la compañçia.:
 
@@ -107,37 +121,80 @@ AS
 RETURN
 (
     SELECT 
-        O.OrderID AS PedidoID,
-        P.ProductName AS Producto,
-        O.Quantity AS Cantidad,
-        S.CompanyName AS Compañía
-    FROM [Order Details] O
-    INNER JOIN Products P ON O.ProductID = P.ProductID
-    INNER JOIN Suppliers S ON P.SupplierID = S.SupplierID
-)
+        od.OrderID AS PedidoID,
+        p.ProductName AS Producto,
+        od.Quantity AS Cantidad,
+        c.CompanyName AS Compañía
+    FROM [Order Details] od
+    INNER JOIN Products p ON od.ProductID = p.ProductID
+    INNER JOIN Orders o ON od.OrderID = o.OrderID
+    INNER JOIN Customers c ON o.CustomerID = c.CustomerID
+);
 
-SELECT dbo.DetallesPedidos()
+SELECT * FROM dbo.DetallesPedidos();
 
 --8. OBTENER VENTAS MENSUALES POR CATEGORÍA. Mostrar por cada año y mes, el nombre de la categoría y la cantidad de ventas realizadas.:
 
-CREATE OR ALTER FUNCTION dbo.Ventas(@Categoria VARCHAR(MAX))
-RETURNS VARCHAR(MAX)
-BEGIN
-	DECLARE @Resultado VARCHAR(MAX)
+CREATE OR ALTER FUNCTION dbo.VentasMensualesPorCategoria()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        YEAR(O.OrderDate) AS Año,
+        MONTH(O.OrderDate) AS Mes,
+        C.CategoryName AS Categoría,
+        SUM(OD.Quantity * OD.UnitPrice * (1 - OD.Discount)) AS TotalVentas
+    FROM 
+        Orders O
+    INNER JOIN [Order Details] OD ON O.OrderID = OD.OrderID
+    INNER JOIN Products P ON OD.ProductID = P.ProductID
+    INNER JOIN Categories C ON P.CategoryID = C.CategoryID
+    GROUP BY 
+        YEAR(O.OrderDate), MONTH(O.OrderDate), C.CategoryName
+);
 
-	SELECT @Resultado = SELECT  FROM Orders O INNER JOIN [Order Details] OD ON O.OrderID = OD.OrderID INNER JOIN Products P ON OD.ProductID = P.ProductID INNER JOIN Categories C ON P.CategoryID = C.CategoryID WHERE C.CategoryName = @Categoria
-	
-	RETURN @Resultado
-END
-
-SELECT * FROM Categories
-
-EXEC dbo.Ventas('Confections')
+SELECT * FROM dbo.VentasMensualesPorCategoria();
 
 --9. OBTENER RESUMEN SEMANAL DE VENTAS. Queremos mostrar por cada semana, las ventas realizadas. Ejemplo: 1    500
         --2   200:
 
+CREATE OR ALTER FUNCTION dbo.ResumenVentasSemanales()
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT 
+        DATEPART(WEEK, O.OrderDate) AS Semana,
+        SUM(OD.Quantity * OD.UnitPrice * (1 - OD.Discount)) AS TotalVentas
+    FROM Orders O
+    INNER JOIN [Order Details] OD ON O.OrderID = OD.OrderID
+    GROUP BY DATEPART(WEEK, O.OrderDate)
+);
+
+SELECT * FROM dbo.ResumenVentasSemanales();
+
 --10. OBTENER LOS 10 PRODUCTOS MÁS VENDIDOS:
 
+CREATE OR ALTER FUNCTION dbo.Top10ProductosMasVendidos()
+RETURNS @TopProductos TABLE (
+    ProductID INT,
+    ProductName NVARCHAR(100),
+    TotalVendido INT
+)
+AS
+BEGIN
+    INSERT INTO @TopProductos
+    SELECT TOP 10 
+        P.ProductID,
+        P.ProductName,
+        SUM(OD.Quantity) AS TotalVendido
+    FROM [Order Details] OD
+    INNER JOIN Products P ON OD.ProductID = P.ProductID
+    GROUP BY P.ProductID, P.ProductName
+    ORDER BY TotalVendido DESC
 
+    RETURN
+END
 
+SELECT * FROM dbo.Top10ProductosMasVendidos();
