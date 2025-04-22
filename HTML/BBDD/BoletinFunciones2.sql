@@ -177,24 +177,25 @@ SELECT * FROM dbo.ResumenVentasSemanales();
 --10. OBTENER LOS 10 PRODUCTOS MÁS VENDIDOS:
 
 CREATE OR ALTER FUNCTION dbo.Top10ProductosMasVendidos()
-RETURNS @TopProductos TABLE (
+RETURNS @Tabla TABLE (
     ProductID INT,
     ProductName NVARCHAR(100),
     TotalVendido INT
 )
 AS
 BEGIN
-    INSERT INTO @TopProductos
+    INSERT INTO @Tabla
     SELECT TOP 10 
-        P.ProductID,
-        P.ProductName,
+        P.ProductID, 
+        P.ProductName, 
         SUM(OD.Quantity) AS TotalVendido
-    FROM [Order Details] OD
-    INNER JOIN Products P ON OD.ProductID = P.ProductID
+    FROM Products P
+    INNER JOIN [Order Details] OD ON OD.ProductID = P.ProductID
     GROUP BY P.ProductID, P.ProductName
     ORDER BY TotalVendido DESC
 
     RETURN
 END
+
 
 SELECT * FROM dbo.Top10ProductosMasVendidos();
